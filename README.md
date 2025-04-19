@@ -4,41 +4,36 @@ An offline‑first Progressive Web App (PWA) for tracking golf rounds, built wit
 
 ## Features
 
-Phone‑number login: First‑time users enter their mobile number; returning users auto‑redirect to courses.
+- **Phone‑number login**: First‑time users enter their mobile number; returning users auto‑redirect to courses.
 
-Course management: Create new courses (9‑ or 18‑hole) with a simple form.
+- **Course management**: Create new courses (9‑ or 18‑hole) with a simple form.
 
-Game listing: View all past games, showing course name & date.
+- **Game listing**: View all past games, showing course name & date.
 
-Hole‑by‑hole score entry:
+- **Hole‑by‑hole score entry**:
 
-Per‑hole cards are virtualized for performance.
+  - Per‑hole cards are virtualized for performance
+  - Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s
+  - Select a 5‑level rating via colored buttons
+  - Data persists in IndexedDB and survives page reloads
 
-Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s.
-
-Select a 5‑level rating via colored buttons.
-
-Data persists in IndexedDB and survives page reloads.
-
-Offline‑capable PWA:
-
-Uses next-pwa + service worker for asset caching.
-
-System‑UI font stack for zero‑delay rendering.
+- **Offline‑capable PWA**:
+  - Uses next-pwa + service worker for asset caching
+  - System‑UI font stack for zero‑delay rendering
 
 ## Tech Stack
 
-Framework: Next.js 13 (App Router)
+- Framework: Next.js 13 (App Router)
 
-View Layer: Preact (via preact/compat)
+- View Layer: Preact (via preact/compat)
 
-Styling: Tailwind CSS
+- Styling: Tailwind CSS
 
-Local Storage: Dexie (IndexedDB)
+- Local Storage: Dexie (IndexedDB)
 
-List Virtualization: @tanstack/react-virtual
+- List Virtualization: @tanstack/react-virtual
 
-PWA: next-pwa for service worker & manifest
+- PWA: next-pwa for service worker & manifest
 
 ## Getting Started
 
@@ -113,4 +108,4 @@ npm run start
 { id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
 ```
 
-- Scores are keyed by gameId + hole so entries persist and reload correctly.
+- Scores are keyed by gameId + hole so entries persist and reload correctly.
