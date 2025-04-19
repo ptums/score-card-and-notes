@@ -102,7 +102,7 @@ npm run start
 { id, name: string, rounds: 9 | 18 }
 
 // Game
-{ id, date: Date, courseId: number, userId: number, finalNote: string }
+{ id, date: Date, courseId: number, userId: number, finalNote: string, finalScore }
 
 // Score
 { id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
@@ -112,11 +112,11 @@ npm run start
 
 ## TO DO:
 
-- Get final score working
-- Finish games page
+- Finish games page (final note bottom sheet)
 - Get offline working
 - Set up download page
 - Set up payment page
 - 404/500 hundred error contact form page
 - Set up CCM flags (payment page & deployment page)
 - Deploy
+- Update color scheme/font size for optimal outdoor experience

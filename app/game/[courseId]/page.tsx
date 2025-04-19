@@ -25,6 +25,8 @@ export default function GameEntryPage() {
   const [records, setRecords] = useState<(Score | null)[]>([]);
   const [parActive, setParActive] = useState<boolean[]>([]);
   const [scoreActive, setScoreActive] = useState<boolean[]>([]);
+  const [scoreTotal, setScoreTotal] = useState<number>(0);
+
   const parRefs = useRef<Array<HTMLInputElement | null>>([]);
   const scoreRefs = useRef<Array<HTMLInputElement | null>>([]);
   const parTimers = useRef<number[]>([]);
@@ -53,6 +55,7 @@ export default function GameEntryPage() {
           userId: user.id!,
           date: new Date(),
           finalNote: "",
+          finalScore: 0,
         });
         g = await db.games.get(newId);
         if (!g) throw new Error("Failed to create game");
@@ -181,7 +184,15 @@ export default function GameEntryPage() {
     upsertScore(i, { rating: v });
   };
 
-  // 5) virtualizer (unchanged)
+  // 5) Whenever entries[].score changes, recalc and write finalScore
+  useEffect(() => {
+    if (gameId === null) return;
+    const total = entries.reduce((sum, e) => sum + (parseInt(e.score) || 0), 0);
+    setScoreTotal(total);
+    db.games.update(gameId, { finalScore: total });
+  }, [entries, gameId]);
+
+  // 6) virtualizer (unchanged)
   const rowVirtualizer = useVirtualizer({
     count: entries.length,
     getScrollElement: () => parentRef.current,
@@ -197,7 +208,7 @@ export default function GameEntryPage() {
           {gameDate && <p className="text-white text-sm ml-2">- {gameDate}</p>}
         </span>
         <p className="text-white text-sm">
-          <strong>Score:</strong> 100
+          <strong>Score:</strong> {scoreTotal}
         </p>
       </div>
 

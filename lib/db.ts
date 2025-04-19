@@ -18,6 +18,7 @@ export interface Game {
   courseId: number;
   userId: number;
   finalNote: string;
+  finalScore: number;
 }
 
 export interface Score {
@@ -42,6 +43,13 @@ export class AppDB extends Dexie {
       users: "++id, account",
       courses: "++id, name, rounds",
       games: "++id, date, courseId, userId",
+      scores: "++id, gameId, hole, rating",
+    });
+
+    this.version(2).stores({
+      users: "++id, account",
+      courses: "++id, name, rounds",
+      games: "++id, date, courseId, userId, finalNote, finalScore",
       scores: "++id, gameId, hole, rating",
     });
   }
