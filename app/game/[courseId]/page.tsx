@@ -191,14 +191,16 @@ export default function GameEntryPage() {
 
   return (
     <>
-      {courseName && (
-        <div className="px-6 mt-4 flex items-center">
-          <h1 className=" font-bold text-white">{courseName}</h1>
-          {gameDate && (
-            <span className="text-white text-sm ml-2">- {gameDate}</span>
-          )}
-        </div>
-      )}
+      <div className="w-full flex items-center justify-between px-6 mt-4">
+        <span className="flex items-center">
+          {courseName && <h1 className="font-bold text-white">{courseName}</h1>}
+          {gameDate && <p className="text-white text-sm ml-2">- {gameDate}</p>}
+        </span>
+        <p className="text-white text-sm">
+          <strong>Score:</strong> 100
+        </p>
+      </div>
+
       <p className="px-6 pt-4">Par | Score | Rating</p>
       <div
         ref={parentRef}

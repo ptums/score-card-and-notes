@@ -109,3 +109,14 @@ npm run start
 ```
 
 - Scores are keyed by gameId + hole so entries persist and reload correctly.
+
+## TO DO:
+
+- Get final score working
+- Finish games page
+- Get offline working
+- Set up download page
+- Set up payment page
+- 404/500 hundred error contact form page
+- Set up CCM flags (payment page & deployment page)
+- Deploy
