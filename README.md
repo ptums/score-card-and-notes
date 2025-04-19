@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Score Card and Notes
+
+An offline‑first Progressive Web App (PWA) for tracking golf rounds, built with Next.js, Preact, Tailwind CSS, Dexie (IndexedDB), and TanStack Virtual for performant list virtualization.
+
+## Features
+
+Phone‑number login: First‑time users enter their mobile number; returning users auto‑redirect to courses.
+
+Course management: Create new courses (9‑ or 18‑hole) with a simple form.
+
+Game listing: View all past games, showing course name & date.
+
+Hole‑by‑hole score entry:
+
+Per‑hole cards are virtualized for performance.
+
+Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s.
+
+Select a 5‑level rating via colored buttons.
+
+Data persists in IndexedDB and survives page reloads.
+
+Offline‑capable PWA:
+
+Uses next-pwa + service worker for asset caching.
+
+System‑UI font stack for zero‑delay rendering.
+
+## Tech Stack
+
+Framework: Next.js 13 (App Router)
+
+View Layer: Preact (via preact/compat)
+
+Styling: Tailwind CSS
+
+Local Storage: Dexie (IndexedDB)
+
+List Virtualization: @tanstack/react-virtual
+
+PWA: next-pwa for service worker & manifest
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+git clone https://github.com/your-org/score-card-and-notes.git
+cd score-card-and-notes
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+npm install
+Run in development
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Run in development
 
-## Learn More
+```
+npm run dev
+# Visit http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Build & start production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+npm run build
+npm run start
+# PWA assets generated in /public
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```.
+├── app/                      # Next.js App Router pages
+│   ├── layout.tsx            # Root layout
+│   ├── page.tsx              # Home (PhoneNumberInput)
+│   ├── games/
+│   │   └── page.tsx          # GamesPage listing
+│   └── game/
+│       └── [courseId]/
+│           └── page.tsx      # GameEntryPage (virtualized cards)
+├── components/               # Reusable UI components
+│   ├── PhoneNumberInput.tsx
+│   └── GamesPage.tsx
+├── services/                 # Dexie DB setup & migration
+│   └── db.ts                 # IndexedDB schema & migration
+├── styles/
+│   └── globals.css           # Tailwind imports & base styles
+├── public/
+│   ├── manifest.json         # PWA manifest
+│   └── icons/                # PWA icons
+├── tailwind.config.js        # Tailwind configuration
+├── next.config.js            # Next.js + Preact + PWA settings
+└── package.json
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database Schema (Dexie v2)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+// User
+{ id, account: string }
+
+// Course
+{ id, name: string, rounds: 9 | 18 }
+
+// Game
+{ id, date: Date, courseId: number, userId: number, finalNote: string }
+
+// Score
+{ id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
+```
+
+- Scores are keyed by gameId + hole so entries persist and reload correctly.
