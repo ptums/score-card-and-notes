@@ -92,7 +92,14 @@ export default function PhoneNumberInput() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-sans mb-6">Enter your phone number</h1>
-      <div className="flex space-x-2">
+      <div
+        className="flex space-x-2"
+        role="group"
+        aria-labelledby="phone-label"
+      >
+        <label id="phone-label" className="sr-only">
+          Phone Number
+        </label>
         {digits.map((digit, idx) => (
           <input
             key={idx}
@@ -108,6 +115,7 @@ export default function PhoneNumberInput() {
                 inputRefs.current[idx] = el;
               }
             }}
+            aria-label={`Digit ${idx + 1} of phone number`}
             className="w-12 h-12 border border-gray-300 rounded text-center text-xl font-sans focus:border-blue-500 focus:outline-none"
           />
         ))}
