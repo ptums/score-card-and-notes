@@ -112,11 +112,9 @@ npm run start
 
 ## TO DO:
 
-- Finish games page (final note bottom sheet)
-- Get offline working
+- Working on offline capabilities
 - Set up download page
 - Set up payment page
 - 404/500 hundred error contact form page
 - Set up CCM flags (payment page & deployment page)
 - Deploy
-- Update color scheme/font size for optimal outdoor experience

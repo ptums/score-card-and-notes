@@ -1,6 +1,4 @@
 // components/PhoneNumberInput.tsx
-"use client";
-
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "../lib/db"; // adjust path if needed
@@ -11,14 +9,14 @@ export default function PhoneNumberInput() {
   const router = useRouter();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [digits, setDigits] = useState<string[]>(Array(PHONE_LENGTH).fill(""));
-  const timerRef = useRef<number>();
+  const timerRef = useRef<number | null>(null);
 
   // 1) If they've already signed up, skip ahead
   useEffect(() => {
     (async () => {
       const count = await db.users.count();
       if (count > 0) {
-        router.push("/games");
+        router.push("/games?new_player=0");
       }
     })();
   }, [router]);
@@ -66,17 +64,29 @@ export default function PhoneNumberInput() {
   // 5) Debounce submit when all filled
   useEffect(() => {
     if (digits.every((d) => d !== "")) {
-      clearTimeout(timerRef.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
       timerRef.current = window.setTimeout(async () => {
         const phoneNumber = digits.join("");
         await db.users.clear();
-        await db.users.add({ account: phoneNumber });
-        router.push("/games");
+        await db.users.add({
+          account: phoneNumber,
+          game: [],
+        });
+        router.push("/games?new_player=1");
       }, 1500);
     } else {
-      clearTimeout(timerRef.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
     }
-    return () => clearTimeout(timerRef.current);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [digits, router]);
 
   return (
@@ -93,7 +103,11 @@ export default function PhoneNumberInput() {
             value={digit}
             onChange={(e) => handleChange(e, idx)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
-            ref={(el) => (inputRefs.current[idx] = el)}
+            ref={(el) => {
+              if (el) {
+                inputRefs.current[idx] = el;
+              }
+            }}
             className="w-12 h-12 border border-gray-300 rounded text-center text-xl font-sans focus:border-blue-500 focus:outline-none"
           />
         ))}

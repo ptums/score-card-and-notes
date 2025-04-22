@@ -4,6 +4,7 @@ import Dexie, { Table } from "dexie";
 export interface User {
   id?: number;
   account: string;
+  game: Game[];
 }
 
 export interface Course {
@@ -19,6 +20,7 @@ export interface Game {
   userId: number;
   finalNote: string;
   finalScore: number;
+  scores: Score[];
 }
 
 export interface Score {
@@ -50,6 +52,13 @@ export class AppDB extends Dexie {
       users: "++id, account",
       courses: "++id, name, rounds",
       games: "++id, date, courseId, userId, finalNote, finalScore",
+      scores: "++id, gameId, hole, rating",
+    });
+
+    this.version(3).stores({
+      users: "++id, account, game",
+      courses: "++id, name, rounds",
+      games: "++id, date, courseId, userId, finalNote, finalScore, scores",
       scores: "++id, gameId, hole, rating",
     });
   }

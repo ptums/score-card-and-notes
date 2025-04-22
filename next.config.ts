@@ -5,6 +5,10 @@ const nextConfig = withPWA({
   dest: "public",
   register: true,
   skipWaiting: true,
+  buildExcludes: [
+    // skip Next's dynamic CSS manifest which isn't present in Pages Router
+    /_next\/dynamic-css-manifest\.json$/,
+  ],
 })({
   reactStrictMode: true,
   webpack: (config, { dev, isServer }) => {

@@ -1,15 +1,9 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "../lib/db";
+import { db } from "../../lib/db";
 
-export default function NewGameInput() {
+export default function NewCourseForm() {
   const router = useRouter();
-
-  // load existing games
-  const games = useLiveQuery(() => db.games.toArray(), []);
 
   // form state
   const [courseName, setCourseName] = useState("");
@@ -34,7 +28,7 @@ export default function NewGameInput() {
         });
 
         // 2) redirect to your single‑game page
-        router.push(`/game/${courseId}`);
+        router.push(`/game?courseId=${courseId}`);
       }, 1500);
 
       return () => clearTimeout(handle);
@@ -46,19 +40,13 @@ export default function NewGameInput() {
     setSelectedRounds(r);
   };
 
-  // if we have games, we’d list them here
-  if (games && games.length > 0) {
-    console.log(games);
-    return <div>Well get there..</div>;
-  }
-
   // no games → show “Add new course” form
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md flex flex-col">
         <label
           htmlFor="course"
-          className="mb-2 font-sans text-lg w-full text-left"
+          className=" font-sans text-lg w-full text-left font-bold"
         >
           Course
         </label>
@@ -68,14 +56,14 @@ export default function NewGameInput() {
           type="text"
           value={courseName}
           onChange={(e) => setCourseName(e.target.value)}
-          className="w-full bg-white max-w-md p-3 mb-6 border-2 rounded-xl font-sans focus:outline-none focus:border-yellow-500 text-cyan-900 font-semibold"
+          className="w-full bg-white max-w-md p-3 mb-6 border-2 rounded font-sans focus:outline-none focus:border-yellow-500 text-cyan-900 font-semibold"
         />
 
         <div className="flex space-x-4 justify-center">
           <button
             onClick={() => onRoundsClick(9)}
             disabled={!courseName.trim()}
-            className="w-20 h-20 font-bold font-sans text-4xl bg-white border-2 rounded-xl text-green-400 border-green-400 disabled:opacity-80 cursor-pointer
+            className="w-20 h-20 font-bold font-sans text-4xl bg-orange-500 rounded-full disabled:opacity-80 cursor-pointer
 "
           >
             9
@@ -83,7 +71,7 @@ export default function NewGameInput() {
           <button
             onClick={() => onRoundsClick(18)}
             disabled={!courseName.trim()}
-            className="w-20 h-20 font-bold font-sans text-4xl bg-white border-2 rounded-xl text-red-500 text-bold border-red-500 disabled:opacity-80 cursor-pointer
+            className="w-20 h-20 font-bold font-sans text-4xl bg-orange-500 rounded-full disabled:opacity-80 cursor-pointer
 "
           >
             18
