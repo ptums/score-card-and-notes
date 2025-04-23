@@ -1,5 +1,4 @@
 import GamesList from "@/components/GamePage/GamesList";
-import NewCourseForm from "@/components/GamePage/NewCourseForm";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -9,7 +8,8 @@ export default function GamesRoute() {
   const [showForm, setShowForm] = useState(false);
 
   if (showForm || newPlayer === "1") {
-    return <NewCourseForm />;
+    setShowForm(false);
+    router.push("/new-game");
   }
   return <GamesList setShowForm={setShowForm} />;
 }
