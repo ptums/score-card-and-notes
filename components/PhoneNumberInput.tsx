@@ -93,7 +93,7 @@ export default function PhoneNumberInput() {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-sans mb-6">Enter your phone number</h1>
       <div className="flex space-x-2">
-        {digits.map((digit, idx) => (
+        {digits.map((digit: string, idx: number) => (
           <input
             key={idx}
             type="tel"
@@ -101,7 +101,7 @@ export default function PhoneNumberInput() {
             pattern="[0-9]*"
             maxLength={1}
             value={digit}
-            onChange={(e) => handleChange(e, idx)}
+            onChange={(e: any) => handleChange(e, idx)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
             ref={(el) => {
               if (el) {
