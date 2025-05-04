@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { db, Score } from "../lib/db";
 import Link from "next/link";
-import BottomSheet from "@/components/BottomSheet";
 
 type Rating = 0 | 1 | 2 | 3 | 4;
 
