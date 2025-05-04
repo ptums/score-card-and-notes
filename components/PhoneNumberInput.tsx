@@ -101,7 +101,9 @@ export default function PhoneNumberInput() {
             pattern="[0-9]*"
             maxLength={1}
             value={digit}
-            onChange={(e: any) => handleChange(e, idx)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleChange(e, idx)
+            }
             onKeyDown={(e) => handleKeyDown(e, idx)}
             ref={(el) => {
               if (el) {
