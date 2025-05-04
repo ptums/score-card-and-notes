@@ -321,10 +321,10 @@ export default function GameEntryPage() {
           </Link>
         )}
       </div>
-      <BottomSheet
+      {/* <BottomSheet
         label="Home"
         handleCallback={() => router.push("/games?new_player=0")}
-      />
+      /> */}
     </>
   );
 }
