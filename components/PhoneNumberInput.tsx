@@ -18,7 +18,7 @@ export default function PhoneNumberInput() {
     (async () => {
       const count = await db.users.count();
       if (count > 0) {
-        router.push("/games?new_player=0");
+        router.push("/games");
       }
     })();
   }, [router]);
@@ -120,15 +120,11 @@ export default function PhoneNumberInput() {
         <div className="flex flex-col sm:flex-row justify-between">
           <BottomSheet
             label="New Course"
-            handleCallback={() =>
-              router.push("/games?new_player=1&option=course")
-            }
+            handleCallback={() => router.push("/games/option/course")}
           />
           <BottomSheet
             label="New Range"
-            handleCallback={() =>
-              router.push("/games?new_player=1&option=range")
-            }
+            handleCallback={() => router.push("/games/option/range")}
           />
         </div>
       )}
