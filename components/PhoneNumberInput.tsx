@@ -2,12 +2,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "../lib/db"; // adjust path if needed
+import BottomSheet from "./BottomSheet";
 
 const PHONE_LENGTH = 10;
 
 export default function PhoneNumberInput() {
   const router = useRouter();
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const [showOptions, setShowOptions] = useState<boolean>(false);
   const [digits, setDigits] = useState<string[]>(Array(PHONE_LENGTH).fill(""));
   const timerRef = useRef<number | null>(null);
 
@@ -75,7 +77,7 @@ export default function PhoneNumberInput() {
           account: phoneNumber,
           game: [],
         });
-        router.push("/games?new_player=1");
+        setShowOptions(true);
       }, 1500);
     } else {
       if (timerRef.current) {
@@ -114,6 +116,22 @@ export default function PhoneNumberInput() {
           />
         ))}
       </div>
+      {showOptions && (
+        <div className="flex flex-col sm:flex-row justify-between">
+          <BottomSheet
+            label="New Course"
+            handleCallback={() =>
+              router.push("/games?new_player=1&option=course")
+            }
+          />
+          <BottomSheet
+            label="New Range"
+            handleCallback={() =>
+              router.push("/games?new_player=1&option=range")
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }

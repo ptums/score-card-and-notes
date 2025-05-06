@@ -5,11 +5,12 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 import Link from "next/link";
 import BottomSheet from "../BottomSheet";
+import { COURSE_OPTION, RANGE_OPTION } from "@/utils";
 
 export default function GamesList({
   setShowForm,
 }: {
-  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowForm: React.Dispatch<React.SetStateAction<string>>;
 }) {
   // 1️⃣ load & enrich games with course name, formatted date, and finalScore
   const games = useLiveQuery(async () => {
@@ -87,11 +88,18 @@ export default function GamesList({
             })}
           </div>
         </div>
-        return{" "}
-        <BottomSheet
-          label="New Game"
-          handleCallback={() => setShowForm(true)}
-        />
+        <div className="fixed bottom-0 left-0 w-full bg-accent p-4">
+          <div className="flex flex-col sm:flex-row justify-between">
+            <BottomSheet
+              label="New Course"
+              handleCallback={() => setShowForm(COURSE_OPTION)}
+            />
+            <BottomSheet
+              label="Range"
+              handleCallback={() => setShowForm(RANGE_OPTION)}
+            />
+          </div>
+        </div>
       </div>
     );
   }

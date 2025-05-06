@@ -28,7 +28,7 @@ export default function NewCourseForm() {
         });
 
         // 2) redirect to your single‑game page
-        router.push(`/game?courseId=${courseId}`);
+        router.push(`/game?courseId=${courseId}&option=course`);
       }, 1500);
 
       return () => clearTimeout(handle);
