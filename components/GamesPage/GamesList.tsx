@@ -95,7 +95,7 @@ export default function GamesList({
               handleCallback={() => setShowForm(COURSE_OPTION)}
             />
             <BottomSheet
-              label="Range"
+              label="New Range"
               handleCallback={() => setShowForm(RANGE_OPTION)}
             />
           </div>
@@ -103,4 +103,18 @@ export default function GamesList({
       </div>
     );
   }
+  return (
+    <div className="w-full h-screen flex flex-col justify-center">
+      <div className="flex flex-col sm:flex-row justify-between">
+        <BottomSheet
+          label="New Course"
+          handleCallback={() => setShowForm(COURSE_OPTION)}
+        />
+        <BottomSheet
+          label="New Range"
+          handleCallback={() => setShowForm(RANGE_OPTION)}
+        />
+      </div>
+    </div>
+  );
 }

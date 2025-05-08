@@ -7,11 +7,11 @@ export default function GameRoute() {
   const router = useRouter();
   const option = router.query.option as string;
 
-  if (option.includes(COURSE_OPTION)) {
+  if (option?.includes(COURSE_OPTION)) {
     return <CourseFlow />;
   }
 
-  if (option.includes(RANGE_OPTION)) {
+  if (option?.includes(RANGE_OPTION)) {
     return <RangeFlow />;
   }
 

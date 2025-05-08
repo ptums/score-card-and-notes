@@ -1,4 +1,5 @@
 // src/services/db.ts
+import { Rating } from "@/utils/types";
 import Dexie, { Table } from "dexie";
 
 export interface User {
@@ -29,15 +30,24 @@ export interface Score {
   hole: number;
   par: string;
   score: string;
-  rating: 0 | 1 | 2 | 3 | 4;
+  rating: Rating;
 }
 
 export interface Range {
   id?: number;
   userId: number;
-  name: number;
+  name: string;
+  totalYards: number;
+  numBallsPerBucket: string;
+  averageYardHit: number;
+  ballsHit: Ball[];
+}
+
+export interface Ball {
+  id?: number;
+  rangeId: number;
   yards: string;
-  rating: 0 | 1 | 2 | 3 | 4;
+  rating: Rating;
 }
 
 export class AppDB extends Dexie {
@@ -45,7 +55,8 @@ export class AppDB extends Dexie {
   courses!: Table<Course, number>;
   games!: Table<Game, number>;
   scores!: Table<Score, number>;
-  ranges: Table<Range, number> | undefined;
+  ranges!: Table<Range, number>;
+  balls!: Table<Ball, number>;
 
   constructor() {
     super("ScoreCardNotes");
@@ -56,7 +67,11 @@ export class AppDB extends Dexie {
       courses: "++id, name, rounds",
       games: "++id, date, courseId, userId",
       scores: "++id, gameId, hole",
-      ranges: "++id, userId, name, yards, rating",
+
+      ranges:
+        "++id, userId, name, totalYards, numBallsPerBucket, averageYardHit, ballsHit",
+
+      balls: "++id, rangeId, yards, rating",
     });
 
     // version 2: add full text fields for queries (no array fields)
@@ -66,7 +81,10 @@ export class AppDB extends Dexie {
         courses: "++id, name, rounds",
         games: "++id, date, courseId, userId, finalNote, finalScore",
         scores: "++id, gameId, hole, par, score, rating",
-        ranges: "++id, userId, name, yards, rating",
+        ranges:
+          "++id, userId, name, totalYards, numBallsPerBucket, averageYardHit, ballsHit",
+
+        balls: "++id, rangeId, yards, rating",
       })
       .upgrade(() => {
         // Optional: migrate existing records to include default finalNote/finalScore/par/score, etc.
