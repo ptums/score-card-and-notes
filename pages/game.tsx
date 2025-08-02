@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { db, Score } from "../lib/db";
-import Link from "next/link";
+import BottomSheet from "@/components/BottomSheet";
 
 type Rating = 0 | 1 | 2 | 3 | 4;
 
@@ -15,7 +15,6 @@ interface ScoreEntry {
 export default function GameEntryPage() {
   const router = useRouter();
   const courseId = router.query.courseId as string;
-
   const [gameId, setGameId] = useState<number | null>(null);
   const [courseName, setCourseName] = useState<string>("");
   const [isRatingBtn, setIsRatingBtn] = useState<boolean>(false);
@@ -169,13 +168,12 @@ export default function GameEntryPage() {
     <>
       <div className="flex flex-col h-full">
         {/* header */}
-        <div className="flex justify-between px-6 py-4 text-slate-950">
+        <div className="container text-slate-950">
           <h1 className="text-xl font-bold">{courseName}</h1>
           <p className="text-lg">
             <span className="font-bold">Score:</span> {scoreTotal}
           </p>
         </div>
-
         {/* single card */}
         <div className="flex-1 p-6 flex flex-col justify-center">
           <div className="bg-white rounded-lg p-4 shadow relative">
@@ -202,7 +200,6 @@ export default function GameEntryPage() {
                 })}
               </div>
             </div>
-
             {/* Score row */}
             <div className="mb-6">
               <span className="block text-slate-950 mb-2 font-bold">Score</span>
@@ -232,7 +229,6 @@ export default function GameEntryPage() {
                 })}
               </div>
             </div>
-
             {/* Rating row */}
             <div>
               <span className="block text-slate-950 mb-2 font-bold">
@@ -269,7 +265,7 @@ export default function GameEntryPage() {
         </div>
 
         {/* navigation */}
-        <div className="flex justify-between px-6 py-4 bg-dusk">
+        <div className="container bg-dusk">
           <button
             onClick={() => current > 0 && setCurrent(current - 1)}
             disabled={current === 0}
@@ -311,19 +307,29 @@ export default function GameEntryPage() {
             </svg>
           </button>
         </div>
+
         {current === holes - 1 && (
-          <Link
-            href="/games"
-            className="bg-orange-500 active:bg-orange-300 text-black text-center rounded mx-4 p-3 font-bold"
-          >
-            Finish Game
-          </Link>
+          <BottomSheet
+            label="Finish Game"
+            handleCallback={() => router.push("/games")}
+            position="fixed bottom-34 left-0"
+            colorClasses="bg-green-500 active:bg-green-300"
+          />
         )}
       </div>
-      {/* <BottomSheet
+
+      <BottomSheet
+        label="Game Tips"
+        handleCallback={() => router.push("/game-tips")}
+        position="fixed bottom-15 left-0"
+        colorClasses="bg-teal-500 active:bg-teal-300"
+      />
+      <BottomSheet
         label="Home"
         handleCallback={() => router.push("/games?new_player=0")}
-      /> */}
+        position="fixed bottom-0 left-0"
+        colorClasses="bg-orange-500 active:bg-orange-300"
+      />
     </>
   );
 }

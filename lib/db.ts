@@ -32,6 +32,9 @@ export interface Score {
   rating: 0 | 1 | 2 | 3 | 4;
 }
 
+
+
+
 export class AppDB extends Dexie {
   users!: Table<User, number>;
   courses!: Table<Course, number>;

@@ -112,9 +112,4 @@ npm run start
 
 ## TO DO:
 
-- Working on offline capabilities
-- Set up download page
-- Set up payment page
-- 404/500 hundred error contact form page
-- Set up CCM flags (payment page & deployment page)
-- Deploy
+- Integrate convex API
