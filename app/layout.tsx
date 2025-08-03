@@ -3,7 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Score Card and Notes",
+  title: "Your Golf Buddy",
   description: "Golf score tracking and notes app",
 };
 

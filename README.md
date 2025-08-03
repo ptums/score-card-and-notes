@@ -1,4 +1,4 @@
-# Score Card and Notes
+# Your Golf Buddy
 
 An offline‑first Progressive Web App (PWA) for tracking golf rounds, built with Next.js, Preact, Tailwind CSS, Dexie (IndexedDB), and TanStack Virtual for performant list virtualization.
 
@@ -106,3 +106,7 @@ npm run start
 ```
 
 - Scores are keyed by gameId + hole so entries persist and reload correctly.
+
+To Do:
+
+- Assigned a domain to it
