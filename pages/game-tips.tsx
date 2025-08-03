@@ -1,3 +1,5 @@
+import BottomSheet from "@/components/BottomSheet";
+import router from "next/router";
 import gameTipsData from "../lib/game-tips.json";
 
 interface LieAdjustment {
@@ -72,48 +74,37 @@ const GameTips = () => {
                     {tip.weightDistribution}
                   </p>
                 </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                    Notes
-                  </h3>
-                  <p className="text-sm text-gray-600 italic">{tip.notes}</p>
-                </div>
-
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700 mb-2">
                     Lie Adjustments
                   </h3>
                   <div className="space-y-3">
                     {Object.entries(tip.lieAdjustments).map(([key, value]) => (
-                      <div
-                        key={key}
-                        className="border-l-2 border-orange-200 pl-3"
-                      >
+                      <div key={key}>
                         <h4 className="text-xs font-semibold text-gray-700 capitalize mb-1">
                           {key.replace(/([A-Z])/g, " $1").trim()}
                         </h4>
                         <div className="space-y-1 text-xs">
-                          <div className="flex flex-col gap-1">
-                            <div className="flex gap-1">
+                          <ul className="flex flex-col gap-1">
+                            <li className="flex gap-1">
                               <span className="text-gray-500">Target:</span>
                               <span className="text-gray-600">
                                 {value.target}
                               </span>
-                            </div>
-                            <div className="flex gap-1">
+                            </li>
+                            <li className="flex gap-1">
                               <span className="text-gray-500">Grip:</span>
                               <span className="text-gray-600">
                                 {value.grip}
                               </span>
-                            </div>
-                            <div className="flex gap-1">
+                            </li>
+                            <li className="flex gap-1">
                               <span className="text-gray-500">Swing:</span>
                               <span className="text-gray-600">
                                 {value.swing}
                               </span>
-                            </div>
-                          </div>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     ))}
@@ -123,12 +114,12 @@ const GameTips = () => {
             </div>
           ))}
         </div>
-
-        <div className="mt-8 text-center">
-          <p className="text-gray-600 text-sm">
-            Use this guide to set up properly for each club
-          </p>
-        </div>
+        <BottomSheet
+          label="Back"
+          handleCallback={() => router.back()}
+          position="fixed bottom-0 left-0 bg-white border-t-1 border-gray-200"
+          colorClasses="bg-teal-500 active:bg-teal-300 "
+        />
       </div>
     </div>
   );

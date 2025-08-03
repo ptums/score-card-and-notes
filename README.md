@@ -112,4 +112,6 @@ npm run start
 
 ## TO DO:
 
-- Integrate convex API
+- Finish Practice Screen
+- Jump to last hole if game has started
+- Generalize for mulitple users

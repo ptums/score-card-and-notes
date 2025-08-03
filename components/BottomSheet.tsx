@@ -10,7 +10,7 @@ export default function BottomSheet({
   colorClasses?: string;
 }) {
   return (
-    <div className={`${position} w-full bg-accent p-4`}>
+    <div className={`${position} w-full p-4 `}>
       <button
         onClick={handleCallback}
         className={`w-full ${colorClasses} text-black py-3 rounded font-bold cursor-pointer`}

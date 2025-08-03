@@ -5,6 +5,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 import Link from "next/link";
 import BottomSheet from "../BottomSheet";
+import router from "next/router";
 
 export default function GamesList({
   setShowForm,
@@ -87,10 +88,17 @@ export default function GamesList({
             })}
           </div>
         </div>
-        return{" "}
+        <BottomSheet
+          label="Practice Drills"
+          handleCallback={() => router.push("/practice")}
+          position="fixed bottom-15 left-0"
+          colorClasses="bg-teal-500 active:bg-teal-300"
+        />
         <BottomSheet
           label="New Game"
           handleCallback={() => setShowForm(true)}
+          position="fixed bottom-0 left-0"
+          colorClasses="bg-orange-500 active:bg-orange-300"
         />
       </div>
     );
