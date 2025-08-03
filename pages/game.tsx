@@ -77,6 +77,12 @@ export default function GameEntryPage() {
         0
       );
       setScoreTotal(total);
+
+      // find the last record with a par selected and set it to current
+      const lastParIndex = initial.findLastIndex((entry) => entry.par !== "");
+      if (lastParIndex !== -1) {
+        setCurrent(lastParIndex);
+      }
     })();
   }, [courseId]);
 

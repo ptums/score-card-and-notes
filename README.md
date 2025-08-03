@@ -112,6 +112,4 @@ npm run start
 
 ## TO DO:
 
-- Finish Practice Screen
-- Jump to last hole if game has started
 - Generalize for mulitple users
