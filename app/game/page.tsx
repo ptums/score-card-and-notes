@@ -1,8 +1,12 @@
-// app/game/[courseId]/page.tsx
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { db, Score } from "../lib/db";
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { db, Score } from "@/lib/db";
+import type { Game } from "@/lib/db";
 import BottomSheet from "@/components/BottomSheet";
+import AuthGuard from "@/components/AuthGuard";
+import UserMenu from "@/components/UserMenu";
 
 type Rating = 0 | 1 | 2 | 3 | 4;
 
@@ -12,9 +16,10 @@ interface ScoreEntry {
   rating: Rating | null;
 }
 
-export default function GameEntryPage() {
+function GameContent() {
   const router = useRouter();
-  const courseId = router.query.courseId as string;
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("courseId") as string;
   const [gameId, setGameId] = useState<number | null>(null);
   const [courseName, setCourseName] = useState<string>("");
   const [isRatingBtn, setIsRatingBtn] = useState<boolean>(false);
@@ -25,28 +30,31 @@ export default function GameEntryPage() {
 
   // load course, game, existing scores
   useEffect(() => {
+    if (!courseId) return;
+
     (async () => {
       const c = await db.courses.get(Number(courseId));
       if (!c) return;
       setCourseName(c.name);
 
-      const [user] = await db.users.toArray();
-      let g = await db.games
+      // Get the most recent game for this course, or create a new one
+      const games = await db.games
         .where("courseId")
         .equals(c.id!)
-        .and((g) => g.userId === user.id!)
-        .first();
+        .reverse()
+        .sortBy("date");
+
+      let g: Game | undefined = games[0];
 
       if (!g) {
         const newId = await db.games.add({
           courseId: c.id!,
-          userId: user.id!,
           date: new Date(),
           finalNote: "",
           finalScore: 0,
           scores: [],
         });
-        g = await db.games.get(newId)!;
+        g = await db.games.get(newId);
       }
 
       if (g) {
@@ -332,10 +340,32 @@ export default function GameEntryPage() {
       />
       <BottomSheet
         label="Home"
-        handleCallback={() => router.push("/games?new_player=0")}
+        handleCallback={() => router.push("/games")}
         position="fixed bottom-0 left-0"
         colorClasses="bg-orange-500 active:bg-orange-300"
       />
     </>
+  );
+}
+
+export default function Game() {
+  return (
+    <AuthGuard>
+      <>
+        <UserMenu />
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading...</p>
+              </div>
+            </div>
+          }
+        >
+          <GameContent />
+        </Suspense>
+      </>
+    </AuthGuard>
   );
 }

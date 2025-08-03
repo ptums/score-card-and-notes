@@ -1,12 +1,6 @@
 // src/services/db.ts
 import Dexie, { Table } from "dexie";
 
-export interface User {
-  id?: number;
-  account: string;
-  game: Game[];
-}
-
 export interface Course {
   id?: number;
   name: string;
@@ -17,7 +11,6 @@ export interface Game {
   id?: number;
   date: Date;
   courseId: number;
-  userId: number;
   finalNote: string;
   finalScore: number;
   scores: Score[];
@@ -32,11 +25,7 @@ export interface Score {
   rating: 0 | 1 | 2 | 3 | 4;
 }
 
-
-
-
 export class AppDB extends Dexie {
-  users!: Table<User, number>;
   courses!: Table<Course, number>;
   games!: Table<Game, number>;
   scores!: Table<Score, number>;
@@ -45,23 +34,27 @@ export class AppDB extends Dexie {
     super("ScoreCardNotes");
 
     this.version(1).stores({
-      users: "++id, account",
       courses: "++id, name, rounds",
-      games: "++id, date, courseId, userId",
+      games: "++id, date, courseId",
       scores: "++id, gameId, hole, rating",
     });
 
     this.version(2).stores({
-      users: "++id, account",
       courses: "++id, name, rounds",
-      games: "++id, date, courseId, userId, finalNote, finalScore",
+      games: "++id, date, courseId, finalNote, finalScore",
       scores: "++id, gameId, hole, rating",
     });
 
     this.version(3).stores({
-      users: "++id, account, game",
       courses: "++id, name, rounds",
-      games: "++id, date, courseId, userId, finalNote, finalScore, scores",
+      games: "++id, date, courseId, finalNote, finalScore, scores",
+      scores: "++id, gameId, hole, rating",
+    });
+
+    // New version removing user/account dependency
+    this.version(4).stores({
+      courses: "++id, name, rounds",
+      games: "++id, date, courseId, finalNote, finalScore",
       scores: "++id, gameId, hole, rating",
     });
   }

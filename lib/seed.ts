@@ -5,12 +5,6 @@ export async function seedDatabase() {
   await db.delete();
   await db.open();
 
-  // Create a user
-  const userId = await db.users.add({
-    account: "5551234567", // Using a dummy phone number as account
-    game: [], // Initialize empty games array
-  });
-
   // Create two courses
   const course1Id = await db.courses.add({
     name: "Pine Valley Golf Club",
@@ -25,7 +19,6 @@ export async function seedDatabase() {
   // Create a game for course 1
   const game1Id = await db.games.add({
     courseId: course1Id,
-    userId: userId,
     date: new Date("2024-03-15"),
     finalScore: 45,
     finalNote: "Great day for golf!",
@@ -35,7 +28,6 @@ export async function seedDatabase() {
   // Create a game for course 2
   const game2Id = await db.games.add({
     courseId: course2Id,
-    userId: userId,
     date: new Date("2024-03-16"),
     finalScore: 42,
     finalNote: "Beautiful course, challenging holes",

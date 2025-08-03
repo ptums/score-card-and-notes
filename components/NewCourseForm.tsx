@@ -1,6 +1,7 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { db } from "../../lib/db";
+import { db } from "../lib/db";
 
 export default function NewCourseForm() {
   const router = useRouter();
@@ -21,13 +22,13 @@ export default function NewCourseForm() {
   useEffect(() => {
     if (selectedRounds !== null && courseName.trim() !== "") {
       const handle = window.setTimeout(async () => {
-        // 1) create the Course record
+        // Create the Course record
         const courseId = await db.courses.add({
           name: courseName.trim(),
           rounds: selectedRounds,
         });
 
-        // 2) redirect to your single‑game page
+        // Redirect to the game page
         router.push(`/game?courseId=${courseId}`);
       }, 1500);
 
@@ -40,7 +41,7 @@ export default function NewCourseForm() {
     setSelectedRounds(r);
   };
 
-  // no games → show “Add new course” form
+  // no games → show "Add new course" form
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md flex flex-col">

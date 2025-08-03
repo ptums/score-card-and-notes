@@ -4,7 +4,7 @@ An offline‑first Progressive Web App (PWA) for tracking golf rounds, built wit
 
 ## Features
 
-- **Phone‑number login**: First‑time users enter their mobile number; returning users auto‑redirect to courses.
+- **Simple navigation**: Direct access to courses and games without authentication.
 
 - **Course management**: Create new courses (9‑ or 18‑hole) with a simple form.
 
@@ -95,21 +95,14 @@ npm run start
 ## Database Schema (Dexie v2)
 
 ```
-// User
-{ id, account: string }
-
 // Course
 { id, name: string, rounds: 9 | 18 }
 
 // Game
-{ id, date: Date, courseId: number, userId: number, finalNote: string, finalScore }
+{ id, date: Date, courseId: number, finalNote: string, finalScore }
 
 // Score
 { id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
 ```
 
 - Scores are keyed by gameId + hole so entries persist and reload correctly.
-
-## TO DO:
-
-- Generalize for mulitple users

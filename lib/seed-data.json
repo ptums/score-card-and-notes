@@ -1,11 +1,4 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "account": "5551234567",
-      "game": []
-    }
-  ],
   "courses": [
     {
       "id": 1,
@@ -22,7 +15,6 @@
     {
       "id": 1,
       "courseId": 1,
-      "userId": 1,
       "date": "2024-03-15T00:00:00.000Z",
       "finalScore": 45,
       "finalNote": "Great day for golf!",
@@ -31,7 +23,6 @@
     {
       "id": 2,
       "courseId": 2,
-      "userId": 1,
       "date": "2024-03-16T00:00:00.000Z",
       "finalScore": 42,
       "finalNote": "Beautiful course, challenging holes",
