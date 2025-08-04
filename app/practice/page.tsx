@@ -1,10 +1,12 @@
 "use client";
-
-import BottomSheet from "@/components/BottomSheet";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import clubDrillsData from "@/lib/club_drills.json";
+import clubDrillsData from "@/lib/club-drills.json";
 import AuthGuard from "@/components/AuthGuard";
+import ClubTitle from "@/components/ImprovementTemplate/ClubTitle";
+import ImprovementSubTitle from "@/components/ImprovementTemplate/ImprovementSubTitle";
+import ListContainer from "@/components/ImprovementTemplate/ListContainer";
+import ImprovementTitleTask from "@/components/ImprovementTemplate/ImprovementTitleTask";
+import PageTitle from "@/components/ImprovementTemplate/PageTitle";
 
 interface Drill {
   name: string;
@@ -20,7 +22,6 @@ interface ClubDrill {
 }
 
 const Practice = () => {
-  const router = useRouter();
   const [selectedClub, setSelectedClub] = useState<string>("");
   const [currentDrillIndex, setCurrentDrillIndex] = useState(0);
 
@@ -55,17 +56,15 @@ const Practice = () => {
   return (
     <AuthGuard>
       <>
-        <div className="container flex-col  mx-auto">
+        <div className="container flex-col mx-auto p-6">
           {/* Drill Carousel - appears above club selection when a club is selected */}
           {selectedClubData && (
-            <div className="mb-8">
-              <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-gray-800">
-                    {selectedClubData.club}
-                  </h2>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">
+            <div className="mb-10">
+              <div className="bg-white rounded-xl shadow-lg p-8 mb-6 border-2 border-amber-100">
+                <div className="flex items-center justify-between">
+                  <ClubTitle title={selectedClubData.club} />
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-semibold text-slate-600">
                       {currentDrillIndex + 1} of{" "}
                       {selectedClubData.drills.length}
                     </span>
@@ -81,55 +80,48 @@ const Practice = () => {
                   >
                     {selectedClubData.drills.map((drill, index) => (
                       <div key={index} className="w-full flex-shrink-0">
-                        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-6">
-                          <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                            {drill.name}
-                          </h3>
-                          <p className="text-gray-700 mb-4 leading-relaxed">
-                            {drill.description}
-                          </p>
-
-                          <div className="grid grid-cols-1 gap-3">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-600">
-                                Focus:
-                              </span>
-                              <span className="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded-full">
-                                {drill.focus}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-600">
-                                Reps:
-                              </span>
-                              <span className="text-sm bg-green-200 text-green-800 px-2 py-1 rounded-full">
-                                {drill.recommendedReps}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-600">
-                                Level:
-                              </span>
-                              <span className="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded-full">
-                                {drill.difficulty}
-                              </span>
-                            </div>
+                        <ImprovementSubTitle title={drill.name} />
+                        <p className="text-base text-slate-700 mb-6 leading-relaxed">
+                          {drill.description}
+                        </p>
+                        <ListContainer>
+                          <div className="space-y-2">
+                            <ul className="flex flex-col gap-3">
+                              <li className="flex gap-3 items-start">
+                                <ImprovementTitleTask
+                                  title="Focus:"
+                                  task={drill.focus}
+                                />
+                              </li>
+                              <li className="flex gap-3 items-start">
+                                <ImprovementTitleTask
+                                  title="Reps:"
+                                  task={drill.recommendedReps}
+                                />
+                              </li>
+                              <li className="flex gap-3 items-start">
+                                <ImprovementTitleTask
+                                  title="Difficulty:"
+                                  task={drill.difficulty}
+                                />
+                              </li>
+                            </ul>
                           </div>
-                        </div>
+                        </ListContainer>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Carousel Navigation */}
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex justify-between items-center mt-6">
                   <button
                     onClick={prevDrill}
                     disabled={currentDrillIndex === 0}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-300 transition-colors"
+                    className="cursor-pointer flex items-center gap-3 px-6 py-3 bg-slate-200 text-slate-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-300 transition-colors font-semibold text-base"
                   >
                     <svg
-                      className="w-4 h-4"
+                      className="w-5 h-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -144,15 +136,15 @@ const Practice = () => {
                     Previous
                   </button>
 
-                  <div className="flex gap-1">
+                  <div className="flex gap-2">
                     {selectedClubData.drills.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentDrillIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
+                        className={`w-3 h-3 rounded-full transition-colors ${
                           index === currentDrillIndex
-                            ? "bg-blue-500"
-                            : "bg-gray-300"
+                            ? "bg-blue-600"
+                            : "bg-slate-300"
                         }`}
                       />
                     ))}
@@ -163,11 +155,11 @@ const Practice = () => {
                     disabled={
                       currentDrillIndex === selectedClubData.drills.length - 1
                     }
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-300 transition-colors"
+                    className="cursor-pointer flex items-center gap-3 px-6 py-3 bg-slate-200 text-slate-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-300 transition-colors font-semibold text-base"
                   >
                     Next
                     <svg
-                      className="w-4 h-4"
+                      className="w-5 h-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -186,18 +178,16 @@ const Practice = () => {
           )}
 
           {/* Club Selection */}
-          <div className="mb-6 flex flex-col justify-center items-center w-full">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
-              Select a Club
-            </h2>
-            <div className="space-y-3 w-full max-w-md">
+          <div className="mb-8 flex flex-col justify-center items-center w-full">
+            <PageTitle title="Select a Club" />
+            <div className="space-y-4 w-full max-w-lg">
               {clubDrills.map((club) => (
                 <label
                   key={club.club}
-                  className={`flex items-center justify-center p-4  rounded font-bold cursor-pointer  w-full text-center ${
+                  className={`flex items-center justify-center w-full text-black py-3 rounded font-bold cursor-pointer text-center transition-all duration-200 ${
                     selectedClub === club.club
-                      ? "bg-orange-500 active:bg-orange-300 shadow-sm"
-                      : "bg-white hover:shadow-sm border-1 border-gray-400 font-bold"
+                      ? "bg-orange-500 active:bg-orange-300"
+                      : "bg-white hover:shadow-md border-2 border-slate-300 hover:border-orange-300"
                   }`}
                 >
                   <input
@@ -208,25 +198,12 @@ const Practice = () => {
                     onChange={(e) => handleClubSelect(e.target.value)}
                     className="sr-only"
                   />
-                  <span className="font-semibold text-lg">{club.club}</span>
+                  <span className="font-bold text-xl">{club.club}</span>
                 </label>
               ))}
             </div>
           </div>
         </div>
-
-        <BottomSheet
-          label="Game Tips"
-          handleCallback={() => router.push("/game-tips")}
-          position="fixed bottom-15 left-0 bg-white border-t-1 border-gray-200"
-          colorClasses="bg-teal-500 active:bg-teal-300"
-        />
-        <BottomSheet
-          label="Home"
-          handleCallback={() => router.push("/games")}
-          position="fixed bottom-0 left-0 bg-white"
-          colorClasses="bg-orange-500 active:bg-orange-300"
-        />
       </>
     </AuthGuard>
   );

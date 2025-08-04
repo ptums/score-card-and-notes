@@ -6,16 +6,12 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 import Link from "next/link";
 import BottomSheet from "./BottomSheet";
-import { useRouter } from "next/navigation";
-import UserMenu from "./UserMenu";
 
 export default function GamesList({
   setShowForm,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const router = useRouter();
-
   // 1️⃣ load & enrich games with course name, formatted date, and finalScore
   const games = useLiveQuery(async () => {
     const raw = await db.games.toArray();
@@ -38,7 +34,7 @@ export default function GamesList({
   const rowVirtualizer = useVirtualizer({
     count: games?.length ?? 0,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 100,
+    estimateSize: () => 120, // Increased height for better spacing
     overscan: 5,
   });
 
@@ -57,13 +53,12 @@ export default function GamesList({
   // if we have games, we'd list them here
   if (games && games.length > 0) {
     return (
-      <div className="relative min-h-screen bg-background">
-        <UserMenu />
+      <div className="relative min-h-screen bg-amber-50">
         {/* virtualized list */}
         <div
           ref={parentRef}
-          className="overflow-y-auto pb-24" // pad for button
-          style={{ height: "calc(100vh - 64px)" }} // Subtract header height
+          className="overflow-y-auto pb-32" // Increased padding for buttons
+          style={{ height: "calc(100vh - 80px)" }} // Adjusted for header height
         >
           <div
             style={{
@@ -81,37 +76,38 @@ export default function GamesList({
                     top: virtualRow.start,
                     width: "100%",
                   }}
-                  className="px-4"
+                  className="px-6 py-2"
                 >
-                  <div className="bg-white rounded-lg flex items-center justify-between p-4 mb-4 shadow">
+                  <div className="bg-white rounded-xl shadow-lg border-2 border-amber-100 flex items-center justify-between p-6 mb-4 hover:shadow-xl transition-shadow duration-200">
                     <Link
                       href={`/game?courseId=${game.courseId}`}
-                      className="flex-1"
+                      className="flex-1 cursor-pointer"
                     >
-                      <div>
-                        <div className="font-bold text-text">
+                      <div className="space-y-2">
+                        <div className="text-xl font-bold text-slate-800 leading-tight">
                           {game.courseName}
                         </div>
-                        <div className="text-sm text-text">
+                        <div className="text-base text-slate-600 font-medium">
                           Date Played: {game.datePlayed}
                         </div>
                       </div>
                     </Link>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 rounded-full bg-orange-400 flex items-center justify-center">
-                        <span className="text-black font-bold">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 rounded-full bg-orange-500 flex items-center justify-center shadow-md border-2 border-orange-200">
+                        <span className="text-white font-bold text-lg">
                           {game.finalScore}
                         </span>
                       </div>
-                      <div className="border-l border-gray-200 h-8 mx-2"></div>
+                      <div className="border-l-2 border-slate-200 h-12 mx-2"></div>
                       <button
                         onClick={() => handleDeleteGame(game.id)}
-                        className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
+                        className="w-12 h-12 flex items-center justify-center text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors cursor-pointer border-2 border-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         title="Delete game"
+                        aria-label={`Delete game at ${game.courseName}`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5"
+                          className="w-6 h-6"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -132,16 +128,10 @@ export default function GamesList({
           </div>
         </div>
         <BottomSheet
-          label="Practice Drills"
-          handleCallback={() => router.push("/practice")}
-          position="fixed bottom-15 left-0"
-          colorClasses="bg-teal-500 active:bg-teal-300"
-        />
-        <BottomSheet
           label="New Game"
           handleCallback={() => setShowForm(true)}
-          position="fixed bottom-0 left-0"
-          colorClasses="bg-orange-500 active:bg-orange-300"
+          position="fixed bottom-0 left-0 bg-white/80 border-t-2 border-amber-200"
+          colorClasses="bg-orange-600 active:bg-orange-500 text-white font-semibold"
         />
       </div>
     );

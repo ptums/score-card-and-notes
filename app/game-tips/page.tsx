@@ -1,9 +1,14 @@
 "use client";
 
-import BottomSheet from "@/components/BottomSheet";
-import { useRouter } from "next/navigation";
 import gameTipsData from "@/lib/game-tips.json";
 import AuthGuard from "@/components/AuthGuard";
+import ImprovementTask from "@/components/ImprovementTemplate/ImprovementTask";
+import ClubTitle from "@/components/ImprovementTemplate/ClubTitle";
+import ListContainer from "@/components/ImprovementTemplate/ListContainer";
+import ImprovementSubTitle from "@/components/ImprovementTemplate/ImprovementSubTitle";
+import ImprovementTitleTask from "@/components/ImprovementTemplate/ImprovementTitleTask";
+import { useState } from "react";
+import PageTitle from "@/components/ImprovementTemplate/PageTitle";
 
 interface LieAdjustment {
   target: string;
@@ -33,100 +38,117 @@ interface GameTip {
 }
 
 const GameTips = () => {
-  const router = useRouter();
   const tips: GameTip[] = gameTipsData as unknown as GameTip[];
+  const [selectedClub, setSelectedClub] = useState<GameTip | null>(null);
+
+  const handleClubSelect = (club: string) => {
+    const clubData = tips.find((tip) => tip.club === club);
+    if (clubData) {
+      setSelectedClub(clubData);
+    }
+
+    // Scroll to top to show the drill card
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50 p-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Golf Club Setup Guide
-          </h1>
+      <div className="container flex-col mx-auto p-6">
+        {selectedClub && (
+          <div className="mb-10">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-200 border-2 border-amber-100">
+                <ClubTitle title={selectedClub?.club} />
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {tips.map((tip, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200"
-              >
-                <div className="mb-4">
-                  <h2 className="text-xl font-bold text-orange-600 mb-2">
-                    {tip.club}
-                  </h2>
-                </div>
-
-                <div className="space-y-3">
+                <div className="space-y-6">
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                      Ball Position
-                    </h3>
-                    <p className="text-sm text-gray-600">{tip.ballPosition}</p>
+                    <ImprovementTask
+                      title="Ball Position"
+                      description={selectedClub.ballPosition}
+                    />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                      Stance Width
-                    </h3>
-                    <p className="text-sm text-gray-600">{tip.stanceWidth}</p>
+                    <ImprovementTask
+                      title="Stance Width"
+                      description={selectedClub.stanceWidth}
+                    />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                      Weight Distribution
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {tip.weightDistribution}
-                    </p>
+                    <ImprovementTask
+                      title="Weight Distribution"
+                      description={selectedClub.weightDistribution}
+                    />
                   </div>
+
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                    <h3 className="text-lg font-bold mb-4 text-slate-800">
                       Lie Adjustments
                     </h3>
-                    <div className="space-y-3">
-                      {Object.entries(tip.lieAdjustments).map(
+                    <div className="space-y-4">
+                      {Object.entries(selectedClub.lieAdjustments).map(
                         ([key, value]) => (
-                          <div key={key}>
-                            <h4 className="text-xs font-semibold text-gray-700 capitalize mb-1">
-                              {key.replace(/([A-Z])/g, " $1").trim()}
-                            </h4>
-                            <div className="space-y-1 text-xs">
-                              <ul className="flex flex-col gap-1">
-                                <li className="flex gap-1">
-                                  <span className="text-gray-500">Target:</span>
-                                  <span className="text-gray-600">
-                                    {value.target}
-                                  </span>
+                          <ListContainer key={key}>
+                            <ImprovementSubTitle
+                              title={key.replace(/([A-Z])/g, " $1").trim()}
+                            />
+                            <div className="space-y-2">
+                              <ul className="flex flex-col gap-3">
+                                <li className="flex gap-3 items-start">
+                                  <ImprovementTitleTask
+                                    title="Target"
+                                    task={value.target}
+                                  />
                                 </li>
-                                <li className="flex gap-1">
-                                  <span className="text-gray-500">Grip:</span>
-                                  <span className="text-gray-600">
-                                    {value.grip}
-                                  </span>
+                                <li className="flex gap-3 items-start">
+                                  <ImprovementTitleTask
+                                    title="Grip"
+                                    task={value.grip}
+                                  />
                                 </li>
-                                <li className="flex gap-1">
-                                  <span className="text-gray-500">Swing:</span>
-                                  <span className="text-gray-600">
-                                    {value.swing}
-                                  </span>
+                                <li className="flex gap-3 items-start">
+                                  <ImprovementTitleTask
+                                    title="Swing"
+                                    task={value.swing}
+                                  />
                                 </li>
                               </ul>
                             </div>
-                          </div>
+                          </ListContainer>
                         )
                       )}
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+        <div className="mb-8 flex flex-col justify-center items-center w-full">
+          <PageTitle title="Select a Club" />
+          <div className="space-y-4 w-full max-w-lg">
+            {tips.map((tip) => (
+              <label
+                key={tip.club}
+                className={`flex items-center justify-center w-full text-black py-3 rounded font-bold cursor-pointer text-center transition-all duration-200 ${
+                  selectedClub?.club === tip.club
+                    ? "bg-orange-500 active:bg-orange-300"
+                    : "bg-white hover:shadow-md border-2 border-slate-300 hover:border-orange-300"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="club"
+                  value={tip.club}
+                  checked={selectedClub?.club === tip.club}
+                  onChange={(e) => handleClubSelect(e.target.value)}
+                  className="sr-only"
+                />
+                <span className="font-bold text-xl">{tip.club}</span>
+              </label>
             ))}
           </div>
-          <BottomSheet
-            label="Back"
-            handleCallback={() => router.back()}
-            position="fixed bottom-0 left-0 bg-white border-t-1 border-gray-200"
-            colorClasses="bg-teal-500 active:bg-teal-300 "
-          />
         </div>
       </div>
     </AuthGuard>
