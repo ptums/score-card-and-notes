@@ -10,7 +10,7 @@ export default function UserMenu() {
       <div className="flex items-center justify-end">
         <SignOutButton>
           <button
-            className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
             title="Sign Out"
           >
             <svg

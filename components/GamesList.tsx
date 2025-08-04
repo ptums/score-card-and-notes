@@ -106,7 +106,7 @@ export default function GamesList({
                       <div className="border-l border-gray-200 h-8 mx-2"></div>
                       <button
                         onClick={() => handleDeleteGame(game.id)}
-                        className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                        className="w-8 h-8 flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
                         title="Delete game"
                       >
                         <svg

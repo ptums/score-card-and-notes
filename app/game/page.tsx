@@ -6,7 +6,6 @@ import { db, Score } from "@/lib/db";
 import type { Game } from "@/lib/db";
 import BottomSheet from "@/components/BottomSheet";
 import AuthGuard from "@/components/AuthGuard";
-import UserMenu from "@/components/UserMenu";
 
 type Rating = 0 | 1 | 2 | 3 | 4;
 
@@ -352,7 +351,6 @@ export default function Game() {
   return (
     <AuthGuard>
       <>
-        <UserMenu />
         <Suspense
           fallback={
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
