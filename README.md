@@ -109,4 +109,5 @@ npm run start
 
 To Do:
 
-- Assigned a domain to it
+- Get better Practice Drill content
+- Fix position of cards in practice and position screens for table/desktop
