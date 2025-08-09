@@ -1,6 +1,6 @@
 "use client";
 
-import gameTipsData from "@/lib/game-tips.json";
+import SwingTipsData from "@/lib/game-tips.json";
 import AuthGuard from "@/components/AuthGuard";
 import ImprovementTask from "@/components/ImprovementTemplate/ImprovementTask";
 import ClubTitle from "@/components/ImprovementTemplate/ClubTitle";
@@ -28,7 +28,7 @@ interface LieAdjustments {
   downhillLie?: LieAdjustment;
 }
 
-interface GameTip {
+interface SwingTip {
   club: string;
   ballPosition: string;
   stanceWidth: string;
@@ -37,9 +37,9 @@ interface GameTip {
   lieAdjustments: LieAdjustments;
 }
 
-const GameTips = () => {
-  const tips: GameTip[] = gameTipsData as unknown as GameTip[];
-  const [selectedClub, setSelectedClub] = useState<GameTip | null>(null);
+const SwingTips = () => {
+  const tips: SwingTip[] = SwingTipsData as unknown as SwingTip[];
+  const [selectedClub, setSelectedClub] = useState<SwingTip | null>(null);
 
   const handleClubSelect = (club: string) => {
     const clubData = tips.find((tip) => tip.club === club);
@@ -159,4 +159,4 @@ const GameTips = () => {
   );
 };
 
-export default GameTips;
+export default SwingTips;

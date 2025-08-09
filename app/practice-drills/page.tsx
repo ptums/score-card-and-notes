@@ -21,7 +21,7 @@ interface ClubDrill {
   drills: Drill[];
 }
 
-const Practice = () => {
+const PracticeDrills = () => {
   const [selectedClub, setSelectedClub] = useState<string>("");
   const [currentDrillIndex, setCurrentDrillIndex] = useState(0);
 
@@ -212,4 +212,4 @@ const Practice = () => {
   );
 };
 
-export default Practice;
+export default PracticeDrills;
