@@ -126,7 +126,11 @@ const GameTips = () => {
           </div>
         )}
         <div className="mb-8 flex flex-col justify-center items-center w-full">
-          <PageTitle title="Select a Club" />
+          <PageTitle
+            title="Swing Tips"
+            description="Select a club to see the swing tips for that club."
+          />
+
           <div className="space-y-4 w-full max-w-lg">
             {tips.map((tip) => (
               <label

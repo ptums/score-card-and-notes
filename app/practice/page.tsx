@@ -179,7 +179,10 @@ const Practice = () => {
 
           {/* Club Selection */}
           <div className="mb-8 flex flex-col justify-center items-center w-full">
-            <PageTitle title="Select a Club" />
+            <PageTitle
+              title="Practice Drills"
+              description="Select a club and select a practice drills."
+            />
             <div className="space-y-4 w-full max-w-lg">
               {clubDrills.map((club) => (
                 <label
