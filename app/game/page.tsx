@@ -6,6 +6,7 @@ import { db, Score } from "@/lib/db";
 import type { Game } from "@/lib/db";
 import AuthGuard from "@/components/AuthGuard";
 import BottomSheet from "@/components/BottomSheet";
+import NavigationButton from "@/components/NavigationButton";
 import { useRouter } from "next/navigation";
 
 type Rating = 0 | 1 | 2 | 3 | 4;
@@ -295,48 +296,16 @@ function GameContent() {
 
         {/* navigation */}
         <div className="container bg-amber-50 p-6 flex justify-center space-x-6">
-          <button
+          <NavigationButton
             onClick={() => current > 0 && setCurrent(current - 1)}
             disabled={current === 0}
-            className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 cursor-pointer shadow-lg"
-            aria-label="Previous hole"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
+            direction="previous"
+          />
+          <NavigationButton
             onClick={() => current < holes - 1 && setCurrent(current + 1)}
             disabled={current === holes - 1}
-            className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 cursor-pointer shadow-lg"
-            aria-label="Next hole"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+            direction="next"
+          />
         </div>
 
         {current === holes - 1 && (

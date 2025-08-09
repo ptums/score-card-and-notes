@@ -7,6 +7,7 @@ import ImprovementSubTitle from "@/components/ImprovementTemplate/ImprovementSub
 import ListContainer from "@/components/ImprovementTemplate/ListContainer";
 import ImprovementTitleTask from "@/components/ImprovementTemplate/ImprovementTitleTask";
 import PageTitle from "@/components/ImprovementTemplate/PageTitle";
+import NavigationButton from "@/components/NavigationButton";
 
 interface Drill {
   name: string;
@@ -115,26 +116,11 @@ const PracticeDrills = () => {
 
                 {/* Carousel Navigation */}
                 <div className="flex justify-between items-center mt-6">
-                  <button
+                  <NavigationButton
                     onClick={prevDrill}
                     disabled={currentDrillIndex === 0}
-                    className="cursor-pointer flex items-center gap-3 px-6 py-3 bg-slate-200 text-slate-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-300 transition-colors font-semibold text-base"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                    Previous
-                  </button>
+                    direction="previous"
+                  />
 
                   <div className="flex gap-2">
                     {selectedClubData.drills.map((_, index) => (
@@ -149,29 +135,13 @@ const PracticeDrills = () => {
                       />
                     ))}
                   </div>
-
-                  <button
+                  <NavigationButton
                     onClick={nextDrill}
                     disabled={
                       currentDrillIndex === selectedClubData.drills.length - 1
                     }
-                    className="cursor-pointer flex items-center gap-3 px-6 py-3 bg-slate-200 text-slate-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-300 transition-colors font-semibold text-base"
-                  >
-                    Next
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
+                    direction="next"
+                  />
                 </div>
               </div>
             </div>
