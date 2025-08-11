@@ -111,3 +111,4 @@ To Do:
 
 - Get better Practice Drill content
 - Fix position of cards in practice and position screens for table/desktop
+- Number of putts

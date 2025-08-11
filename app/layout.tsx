@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Your Golf Buddy",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <body className="font-sans bg-amber-50 text-slate-950">
           <Header />
           <main className="pt-0">{children}</main>
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>
