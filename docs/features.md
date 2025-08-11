@@ -10,6 +10,7 @@
 - Offline Game State
 - User management screen
 - Speed Insights - https://vercel.com/docs/speed-insights/quickstart#add-the-speedinsights-component-to-your-app
+- Make Swing Tips more visual rather than text based.
 
 ### BE
 
