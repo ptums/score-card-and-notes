@@ -283,7 +283,10 @@
       },
       "downhillLie": {
         "target": "behind the center-left part of the ball",
-        "grip": "controlled grip",
+        "grip": {
+          "numerOfPositions": [1, 2, 3, 4, 5],
+          "position": [5]
+        },
         "swing": "keep hands forward and shorten the swing"
       }
     }
@@ -372,7 +375,10 @@
       },
       "uphillLie": {
         "target": "front of the center-right part of the ball",
-        "grip": "soft grip",
+        "grip": {
+          "numerOfPositions": [1, 2, 3, 4, 5],
+          "position": [1]
+        },
         "swing": "use the slope to help the lift"
       },
       "downhillLie": {

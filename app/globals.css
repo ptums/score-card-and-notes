@@ -8,3 +8,7 @@ body {
 .container {
   @apply flex justify-between px-6 py-4;
 }
+
+.orange-marble-base {
+  @apply w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2;
+}
