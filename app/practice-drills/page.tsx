@@ -2,7 +2,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import clubDrillsData from "@/lib/practice-drills.json";
-import AuthGuard from "@/components/AuthGuard";
+
 
 import ImprovementSubTitle from "@/components/ImprovementTemplate/ImprovementSubTitle";
 import ImprovementTitleTask from "@/components/ImprovementTemplate/ImprovementTitleTask";
@@ -62,9 +62,8 @@ const PracticeDrills = () => {
   };
 
   return (
-    <AuthGuard>
-      <>
-        <div className="container flex-col mx-auto p-6">
+    <>
+      <div className="container flex-col mx-auto p-6">
           {/* Drill Carousel - appears above club selection when a club is selected */}
           {selectedClubData && (
             <div className="mb-10">
@@ -185,7 +184,6 @@ const PracticeDrills = () => {
           </div>
         </div>
       </>
-    </AuthGuard>
   );
 };
 

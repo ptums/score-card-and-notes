@@ -57,6 +57,13 @@ export class AppDB extends Dexie {
       games: "++id, date, courseId, finalNote, finalScore",
       scores: "++id, gameId, hole, rating",
     });
+
+    // Version 6: Remove user tracking
+    this.version(6).stores({
+      courses: "++id, name, rounds",
+      games: "++id, date, courseId, finalNote, finalScore",
+      scores: "++id, gameId, hole, rating",
+    });
   }
 }
 

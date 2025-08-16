@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import OfflineStatus from "@/components/OfflineStatus";
 
 export const metadata: Metadata = {
   title: "Your Golf Buddy",
@@ -15,14 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className="font-sans bg-amber-50 text-slate-950">
-          <Header />
-          <main className="pt-0">{children}</main>
-          <SpeedInsights />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className="font-sans bg-amber-50 text-slate-950">
+        <Header />
+        <main className="pt-0">{children}</main>
+        <SpeedInsights />
+        <OfflineStatus />
+      </body>
+    </html>
   );
 }

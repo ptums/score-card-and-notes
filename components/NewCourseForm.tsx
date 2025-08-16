@@ -15,24 +15,37 @@ export default function NewCourseForm() {
 
   // focus the course input on load
   useEffect(() => {
-    inputRef.current?.focus();
+    if (typeof window !== "undefined") {
+      inputRef.current?.focus();
+    }
   }, []);
 
   // when both name + rounds are set, wait 1.5s then save & redirect
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     if (selectedRounds !== null && courseName.trim() !== "") {
-      const handle = window.setTimeout(async () => {
+      const handle = setTimeout(async () => {
         // Create the Course record
+        const userId =
+          typeof window !== "undefined" && localStorage.getItem("offline_user")
+            ? JSON.parse(localStorage.getItem("offline_user")!).id
+            : undefined;
         const courseId = await db.courses.add({
           name: courseName.trim(),
           rounds: selectedRounds,
+          userId,
         });
 
         // Redirect to the game page
         router.push(`/game?courseId=${courseId}`);
       }, 1500);
 
-      return () => clearTimeout(handle);
+      return () => {
+        if (typeof window !== "undefined") {
+          clearTimeout(handle);
+        }
+      };
     }
   }, [selectedRounds, courseName, router]);
 
