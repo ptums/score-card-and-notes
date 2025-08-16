@@ -8,7 +8,7 @@ export default function UserMenu() {
   return (
     <header className="w-full  px-4 py-3">
       <div className="flex items-center justify-end">
-        <SignOutButton>
+        {/* <SignOutButton>
           <button
             className="p-2 text-gray-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
             title="Sign Out"
@@ -28,7 +28,8 @@ export default function UserMenu() {
               />
             </svg>
           </button>
-        </SignOutButton>
+        </SignOutButton> */}
+        Cool
       </div>
     </header>
   );

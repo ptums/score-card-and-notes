@@ -1,20 +1,25 @@
 {
   "name": "Your Golf Buddy",
   "short_name": "ScoreCard",
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#F97316",
+  "orientation": "portrait",
+  "categories": ["sports", "productivity"],
   "icons": [
     {
       "src": "/favicon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ]
 }

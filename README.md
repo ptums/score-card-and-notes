@@ -1,114 +1,70 @@
 # Your Golf Buddy
 
-An offline‑first Progressive Web App (PWA) for tracking golf rounds, built with Next.js, Preact, Tailwind CSS, Dexie (IndexedDB), and TanStack Virtual for performant list virtualization.
+A lightweight Progressive Web App (PWA) for tracking golf scores and managing your golf games.
 
-## Features
+## 🚀 Lightweight PWA Features
 
-- **Simple navigation**: Direct access to courses and games without authentication.
+This app takes a **lightweight PWA approach** - focusing on the core features you actually need offline:
 
-- **Course management**: Create new courses (9‑ or 18‑hole) with a simple form.
+### ✅ **Core Offline Features**
 
-- **Game listing**: View all past games, showing course name & date.
+- **Score Entry & Game Management** - Continue scoring even when offline
+- **Course Data** - Basic course information cached locally
+- **Game History** - View and manage past games offline
+- **Basic UI** - Core app interface works without internet
 
-- **Hole‑by‑hole score entry**:
+### 🌐 **Online Features**
 
-  - Per‑hole cards are virtualized for performance
-  - Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s
-  - Select a 5‑level rating via colored buttons
-  - Data persists in IndexedDB and survives page reloads
+- **Push Notifications** - Get notified about your golf activities
+- **Future Backend Sync** - When you're ready to add cloud storage
+- **Advanced Analytics** - Handicap calculations and statistics
 
-- **Offline‑capable PWA**:
-  - Uses next-pwa + service worker for asset caching
-  - System‑UI font stack for zero‑delay rendering
+### 💡 **Why Lightweight PWA?**
 
-## Tech Stack
+- **Faster Performance** - Only essential resources cached
+- **Smaller Footprint** - Minimal storage usage
+- **Easier Maintenance** - Simpler service worker logic
+- **Better User Experience** - Focus on what matters most
 
-- Framework: Next.js 13 (App Router)
+## 🏗️ Tech Stack
 
-- View Layer: Preact (via preact/compat)
+- **Frontend**: Next.js 14, React, TypeScript
+- **Database**: Dexie.js (IndexedDB wrapper)
+- **Styling**: Tailwind CSS
+- **Authentication**: Clerk
+- **PWA**: Lightweight service worker with essential caching
 
-- Styling: Tailwind CSS
+## 📱 Installation
 
-- Local Storage: Dexie (IndexedDB)
+1. **Automatic**: Click "Add to Home Screen" when prompted
+2. **Manual**: Use browser menu (⋮) → "Install App" or "Add to Home Screen"
+3. **iOS**: Share button → "Add to Home Screen"
 
-- List Virtualization: @tanstack/react-virtual
+## 🎯 Core Functionality
 
-- PWA: next-pwa for service worker & manifest
+- Track golf scores hole by hole
+- Manage multiple courses
+- Store game notes and ratings
+- View game history
+- Basic offline functionality
 
-## Getting Started
+## 🚧 Development
 
-1. Clone the repo
+```bash
+# Install dependencies
+yarn install
 
-```
-git clone https://github.com/your-org/score-card-and-notes.git
-cd score-card-and-notes
-```
+# Run development server
+yarn dev
 
-2. Install dependencies
-
-```
-npm install
-Run in development
-```
-
-3. Run in development
-
-```
-npm run dev
-# Visit http://localhost:3000
-```
-
-4. Build & start production
-
-```
-npm run build
-npm run start
-# PWA assets generated in /public
+# Build for production
+yarn build
 ```
 
-## Project Structure
+## 📋 Roadmap
 
-```.
-├── app/                      # Next.js App Router pages
-│   ├── layout.tsx            # Root layout
-│   ├── page.tsx              # Home (PhoneNumberInput)
-│   ├── games/
-│   │   └── page.tsx          # GamesPage listing
-│   └── game/
-│       └── [courseId]/
-│           └── page.tsx      # GameEntryPage (virtualized cards)
-├── components/               # Reusable UI components
-│   ├── PhoneNumberInput.tsx
-│   └── GamesPage.tsx
-├── services/                 # Dexie DB setup & migration
-│   └── db.ts                 # IndexedDB schema & migration
-├── styles/
-│   └── globals.css           # Tailwind imports & base styles
-├── public/
-│   ├── manifest.json         # PWA manifest
-│   └── icons/                # PWA icons
-├── tailwind.config.js        # Tailwind configuration
-├── next.config.js            # Next.js + Preact + PWA settings
-└── package.json
-```
+See [docs/roadmap.md](docs/roadmap.md) for upcoming features and development plans.
 
-## Database Schema (Dexie v2)
+## 🤝 Contributing
 
-```
-// Course
-{ id, name: string, rounds: 9 | 18 }
-
-// Game
-{ id, date: Date, courseId: number, finalNote: string, finalScore }
-
-// Score
-{ id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
-```
-
-- Scores are keyed by gameId + hole so entries persist and reload correctly.
-
-To Do:
-
-- Get better Practice Drill content
-- Fix position of cards in practice and position screens for table/desktop
-- Number of putts
+This is a personal project, but suggestions and feedback are welcome!

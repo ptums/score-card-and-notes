@@ -3,8 +3,12 @@ import GamesList from "@/components/GamesList";
 import NewCourseForm from "@/components/NewCourseForm";
 import { useState, useEffect } from "react";
 import { db } from "../../lib/db";
-import AuthGuard from "@/components/AuthGuard";
+import HybridAuthGuard from "@/components/HybridAuthGuard";
 import BottomSheet from "@/components/BottomSheet";
+import PullToRefresh from "@/components/PullToRefresh";
+import RefreshButton from "@/components/RefreshButton";
+
+import OfflineNotifications from "@/components/OfflineNotifications";
 
 export default function Games() {
   const [showForm, setShowForm] = useState(false);
@@ -13,14 +17,25 @@ export default function Games() {
   );
 
   // Check if there are existing games
-  useEffect(() => {
-    const checkExistingGames = async () => {
-      const gamesCount = await db.games.count();
-      setHasExistingGames(gamesCount > 0);
-    };
+  const checkExistingGames = async () => {
+    const gamesCount = await db.games.count();
+    setHasExistingGames(gamesCount > 0);
+  };
 
+  useEffect(() => {
     checkExistingGames();
   }, []);
+
+  // Refresh function
+  const handleRefresh = async () => {
+    console.log("Refreshing games data...");
+
+    // Refresh the games data
+    await checkExistingGames();
+
+    // Force a re-render of components
+    window.location.reload();
+  };
 
   // Show loading while checking data
   if (hasExistingGames === null) {
@@ -35,23 +50,35 @@ export default function Games() {
   }
 
   return (
-    <AuthGuard>
-      <>
-        {/* Show form for new players or when explicitly requested */}
-        {showForm || !hasExistingGames ? (
-          <NewCourseForm />
-        ) : (
-          <div className="relative min-h-screen bg-amber-50">
-            <GamesList />
-            <BottomSheet
-              label="New Game"
-              handleCallback={() => setShowForm(true)}
-              position="fixed bottom-0 left-0 bg-white/80 border-t-2 border-amber-200"
-              colorClasses="bg-orange-600 active:bg-orange-500 text-white font-semibold"
+    <HybridAuthGuard>
+      <PullToRefresh onRefresh={handleRefresh}>
+        <>
+          <OfflineNotifications />
+          {/* Refresh Button - Fixed position */}
+          <div className="fixed top-20 right-4 z-40">
+            <RefreshButton
+              onRefresh={handleRefresh}
+              size="md"
+              className="shadow-xl"
             />
           </div>
-        )}
-      </>
-    </AuthGuard>
+
+          {/* Show form for new players or when explicitly requested */}
+          {showForm || !hasExistingGames ? (
+            <NewCourseForm />
+          ) : (
+            <div className="relative min-h-screen bg-amber-50">
+              <GamesList />
+              <BottomSheet
+                label="New Game"
+                handleCallback={() => setShowForm(true)}
+                position="fixed bottom-0 left-0 bg-white/80 border-t-2 border-amber-200"
+                colorClasses="bg-orange-600 active:bg-orange-500 text-white font-semibold"
+              />
+            </div>
+          )}
+        </>
+      </PullToRefresh>
+    </HybridAuthGuard>
   );
 }

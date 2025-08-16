@@ -6,7 +6,7 @@ import { useClerk } from "@clerk/nextjs";
 
 const Header = () => {
   const router = useRouter();
-  const { signOut } = useClerk();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -150,9 +150,9 @@ const Header = () => {
                   </div>
                 </button>
 
-                <div className="border-t-2 border-amber-200 my-2"></div>
+                {/* <div className="border-t-2 border-amber-200 my-2"></div> */}
 
-                <button
+                {/* <button
                   onClick={handleSignOut}
                   className="w-full px-6 py-4 text-left text-lg font-bold text-red-700 hover:bg-red-50 transition-colors duration-200 focus:outline-none focus:bg-red-50 focus:ring-2 focus:ring-red-500 focus:ring-inset cursor-pointer"
                 >
@@ -172,7 +172,7 @@ const Header = () => {
                     </svg>
                     Sign Out
                   </div>
-                </button>
+                </button> */}
               </div>
             </div>
           )}
