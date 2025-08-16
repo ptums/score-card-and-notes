@@ -1,13 +1,20 @@
 "use client";
 import { useState } from "react";
-import clubDrillsData from "@/lib/club-drills.json";
+import dynamic from "next/dynamic";
+import clubDrillsData from "@/lib/practice-drills.json";
 import AuthGuard from "@/components/AuthGuard";
-import ClubTitle from "@/components/ImprovementTemplate/ClubTitle";
+
 import ImprovementSubTitle from "@/components/ImprovementTemplate/ImprovementSubTitle";
-import ListContainer from "@/components/ImprovementTemplate/ListContainer";
 import ImprovementTitleTask from "@/components/ImprovementTemplate/ImprovementTitleTask";
 import PageTitle from "@/components/ImprovementTemplate/PageTitle";
 import NavigationButton from "@/components/NavigationButton";
+
+const ClubTitle = dynamic(
+  () => import("@/components/ImprovementTemplate/ClubTitle")
+);
+const ListContainer = dynamic(
+  () => import("@/components/ImprovementTemplate/ListContainer")
+);
 
 interface Drill {
   name: string;
