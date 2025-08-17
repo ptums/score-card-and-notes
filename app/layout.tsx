@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import "./globals.css";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import SyncNotification from "@/components/SyncNotification";
 
 export const metadata: Metadata = {
   title: "Your Golf Buddy",
@@ -50,6 +51,7 @@ export default function RootLayout({
         <Header />
         <main className="pt-0">{children}</main>
         <PWAInstallPrompt />
+        <SyncNotification />
         <script
           dangerouslySetInnerHTML={{
             __html: `
