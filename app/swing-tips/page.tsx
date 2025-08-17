@@ -2,7 +2,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import SwingTipsData from "@/lib/swing-tips.json";
-
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const ClubTitle = dynamic(
   () => import("@/components/ImprovementTemplate/ClubTitle")
@@ -65,7 +65,8 @@ const SwingTips = () => {
   };
 
   return (
-    <div className="container flex-col mx-auto p-6">
+    <ProtectedRoute>
+      <div className="container flex-col mx-auto p-6">
         {selectedClub && (
           <div className="mb-10">
             <div className="flex-1 p-6 flex flex-col justify-center">
@@ -277,6 +278,7 @@ const SwingTips = () => {
           </div>
         </div>
       </div>
+    </ProtectedRoute>
   );
 };
 

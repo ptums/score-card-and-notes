@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { LoginCredentials, RegisterCredentials } from "@/lib/auth";
 
-export default function Home() {
+export default function SignIn() {
   const [isLogin, setIsLogin] = useState(true);
   const [credentials, setCredentials] = useState<
     LoginCredentials | RegisterCredentials

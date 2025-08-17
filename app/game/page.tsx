@@ -9,12 +9,10 @@ import BottomSheet from "@/components/BottomSheet";
 import NavigationButton from "@/components/NavigationButton";
 import { useRouter } from "next/navigation";
 
-type Rating = 0 | 1 | 2 | 3 | 4;
-
 interface ScoreEntry {
   par: string;
   score: string;
-  rating: Rating | null;
+  putts: number | null;
 }
 
 function GameContent() {
@@ -23,7 +21,7 @@ function GameContent() {
   const courseId = searchParams.get("courseId") as string;
   const [gameId, setGameId] = useState<number | null>(null);
   const [courseName, setCourseName] = useState<string>("");
-  const [isRatingBtn, setIsRatingBtn] = useState<boolean>(false);
+  const [isPuttsBtn, setIsPuttsBtn] = useState<boolean>(false);
   const [isScoreBtn, setIsScoreBtn] = useState<boolean>(false);
   const [scoreTotal, setScoreTotal] = useState(0);
   const [entries, setEntries] = useState<ScoreEntry[]>([]);
@@ -76,7 +74,7 @@ function GameContent() {
       const initial = recs.map((r) => ({
         par: r?.par ?? "",
         score: r?.score ?? "",
-        rating: r?.rating ?? null,
+        putts: r?.putts ?? null,
       }));
       setEntries(initial);
 
@@ -95,17 +93,17 @@ function GameContent() {
     })();
   }, [courseId]);
 
-  // enable rating buttons
+  // enable putts buttons
   useEffect(() => {
     if (isScoreBtn) {
-      setIsRatingBtn(true);
+      setIsPuttsBtn(true);
     }
   }, [isScoreBtn]);
 
   // upsert helper
   const upsertScore = async (
     idx: number,
-    partial: Partial<Pick<Score, "par" | "score" | "rating">>
+    partial: Partial<Pick<Score, "par" | "score" | "putts">>
   ) => {
     if (gameId === null) return;
     const existing = await db.scores
@@ -122,7 +120,7 @@ function GameContent() {
         hole: idx,
         par: partial.par ?? "",
         score: partial.score ?? "",
-        rating: partial.rating ?? 0,
+        putts: partial.putts ?? 0,
       } as Score);
     }
   };
@@ -153,21 +151,21 @@ function GameContent() {
     }
   };
 
-  // handle Rating selection
-  const onRate = async (val: Rating) => {
+  // handle Putts selection
+  const onPutts = async (val: number) => {
     const updated = [...entries];
-    updated[current].rating = val;
+    updated[current].putts = val;
     setEntries(updated);
-    await upsertScore(current, { rating: val });
+    await upsertScore(current, { putts: val });
   };
 
-  const handleRating = (opt: number) => {
-    onRate(opt as Rating);
+  const handlePutts = (opt: number) => {
+    onPutts(opt);
 
     const handle = window.setTimeout(async () => {
       // 1) create the Course record
 
-      setIsRatingBtn(false);
+      setIsPuttsBtn(false);
       setIsScoreBtn(false);
       if (current < holes - 1) {
         setCurrent(current + 1);
@@ -226,8 +224,42 @@ function GameContent() {
                 })}
               </div>
             </div>
-            {/* Score row */}
+            {/* Putts row */}
             <div className="mb-8">
+              <span className="block text-slate-900 mb-4 font-bold text-lg">
+                Putts
+              </span>
+              <div className="flex space-x-3">
+                {[1, 2, 3, 4, 5].map((n) => {
+                  const active = entries[current]?.putts === n;
+
+                  return (
+                    <button
+                      key={n}
+                      onClick={() => {
+                        handlePutts(n);
+                      }}
+                      disabled={!entries[current]?.par}
+                      className={`
+                      w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
+                      ${
+                        isPuttsBtn || entries[current]?.par
+                          ? active
+                            ? "bg-orange-600 text-white shadow-lg"
+                            : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
+                          : "bg-slate-100 border-2 border-slate-200 text-slate-400 opacity-50 cursor-not-allowed"
+                      }
+                    `}
+                      aria-label={`Select ${n} putts`}
+                    >
+                      {n}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {/* Score row */}
+            <div>
               <span className="block text-slate-900 mb-4 font-bold text-lg">
                 Score
               </span>
@@ -239,11 +271,10 @@ function GameContent() {
                     <button
                       key={n}
                       onClick={() => onScoreSelect(n)}
-                      disabled={!entries[current]?.par}
                       className={`
                       w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
                       ${
-                        entries[current]?.par
+                        entries[current]?.putts
                           ? active
                             ? "bg-orange-600 text-white shadow-lg"
                             : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
@@ -251,39 +282,6 @@ function GameContent() {
                       }
                     `}
                       aria-label={`Select score ${n}`}
-                    >
-                      {n}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-            {/* Rating row */}
-            <div>
-              <span className="block text-slate-900 mb-4 font-bold text-lg">
-                Rating
-              </span>
-              <div className="flex space-x-3">
-                {[1, 2, 3, 4, 5].map((n) => {
-                  const active = entries[current]?.rating === n;
-
-                  return (
-                    <button
-                      key={n}
-                      onClick={() => {
-                        handleRating(n);
-                      }}
-                      className={`
-                      w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
-                      ${
-                        isRatingBtn || entries[current]?.rating
-                          ? active
-                            ? "bg-orange-600 text-white shadow-lg"
-                            : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
-                          : "bg-slate-100 border-2 border-slate-200 text-slate-400 opacity-50 cursor-not-allowed"
-                      }
-                    `}
-                      aria-label={`Rate hole ${n} stars`}
                     >
                       {n}
                     </button>

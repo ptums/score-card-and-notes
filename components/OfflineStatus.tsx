@@ -1,43 +1,37 @@
 "use client";
 
-export default function OfflineStatus() {
-  // Only render in browser
-  if (typeof window === "undefined") return null;
+import { useEffect, useState } from "react";
 
-  // Check if we're offline
-  const isOffline = typeof window !== "undefined" && !navigator.onLine;
-  
-  if (!isOffline) return null;
+export default function OfflineStatus() {
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    // Set initial status
+    setIsOnline(navigator.onLine);
+
+    // Add event listeners
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50">
-      <div className="bg-orange-100 border-2 border-orange-300 rounded-lg p-4 shadow-lg">
-        <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0">
-            <svg
-              className="w-5 h-5 text-orange-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-              />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-sm font-medium text-orange-800">
-              You&apos;re currently offline
-            </h3>
-            <p className="mt-1 text-sm text-orange-700">
-              You can continue using the app offline. Your data is being saved locally.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <svg
+      className={`w-6 h-6 transition-colors duration-200 ${
+        isOnline ? "text-blue-500" : "text-gray-400"
+      }`}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+    </svg>
   );
 }

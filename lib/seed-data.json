@@ -36,7 +36,7 @@
       "hole": 0,
       "par": "3",
       "score": "4",
-      "rating": 1
+      "putts": 2
     },
     {
       "id": 2,
@@ -44,7 +44,7 @@
       "hole": 1,
       "par": "4",
       "score": "5",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 3,
@@ -52,7 +52,7 @@
       "hole": 2,
       "par": "3",
       "score": "4",
-      "rating": 1
+      "putts": 2
     },
     {
       "id": 4,
@@ -60,7 +60,7 @@
       "hole": 3,
       "par": "4",
       "score": "6",
-      "rating": 3
+      "putts": 4
     },
     {
       "id": 5,
@@ -68,7 +68,7 @@
       "hole": 4,
       "par": "3",
       "score": "4",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 6,
@@ -76,7 +76,7 @@
       "hole": 5,
       "par": "4",
       "score": "5",
-      "rating": 1
+      "putts": 2
     },
     {
       "id": 7,
@@ -84,7 +84,7 @@
       "hole": 6,
       "par": "3",
       "score": "4",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 8,
@@ -92,7 +92,7 @@
       "hole": 7,
       "par": "4",
       "score": "5",
-      "rating": 3
+      "putts": 4
     },
     {
       "id": 9,
@@ -100,7 +100,7 @@
       "hole": 8,
       "par": "3",
       "score": "4",
-      "rating": 1
+      "putts": 2
     },
     {
       "id": 10,
@@ -108,7 +108,7 @@
       "hole": 0,
       "par": "3",
       "score": "3",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 11,
@@ -116,7 +116,7 @@
       "hole": 1,
       "par": "4",
       "score": "4",
-      "rating": 3
+      "putts": 4
     },
     {
       "id": 12,
@@ -124,7 +124,7 @@
       "hole": 2,
       "par": "3",
       "score": "3",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 13,
@@ -132,7 +132,7 @@
       "hole": 3,
       "par": "4",
       "score": "5",
-      "rating": 4
+      "putts": 5
     },
     {
       "id": 14,
@@ -140,7 +140,7 @@
       "hole": 4,
       "par": "3",
       "score": "3",
-      "rating": 3
+      "putts": 4
     },
     {
       "id": 15,
@@ -148,7 +148,7 @@
       "hole": 5,
       "par": "4",
       "score": "4",
-      "rating": 2
+      "putts": 3
     },
     {
       "id": 16,
@@ -156,7 +156,7 @@
       "hole": 6,
       "par": "3",
       "score": "3",
-      "rating": 3
+      "putts": 4
     },
     {
       "id": 17,
@@ -164,7 +164,7 @@
       "hole": 7,
       "par": "4",
       "score": "4",
-      "rating": 4
+      "putts": 5
     },
     {
       "id": 18,
@@ -172,7 +172,7 @@
       "hole": 8,
       "par": "3",
       "score": "3",
-      "rating": 2
+      "putts": 3
     }
   ]
 }

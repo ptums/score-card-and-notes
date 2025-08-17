@@ -14,7 +14,7 @@ An offline‑first Progressive Web App (PWA) for tracking golf rounds, built wit
 
   - Per‑hole cards are virtualized for performance
   - Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s
-  - Select a 5‑level rating via colored buttons
+  - Select number of putts per hole (1-5)
   - Data persists in IndexedDB and survives page reloads
 
 - **Offline‑capable PWA**:
@@ -102,7 +102,7 @@ npm run start
 { id, date: Date, courseId: number, finalNote: string, finalScore }
 
 // Score
-{ id, gameId: number, hole: number, par: string, score: string, rating: 0–4 }
+{ id, gameId: number, hole: number, par: string, score: string, putts: number }
 ```
 
 - Scores are keyed by gameId + hole so entries persist and reload correctly.

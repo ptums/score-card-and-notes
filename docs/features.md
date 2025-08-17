@@ -4,8 +4,6 @@
 
 ### FE
 
-- Putter feature third
-- Rating forth - slider
 - Selection screen
 - User management screen
 - Speed Insights - https://vercel.com/docs/speed-insights/quickstart#add-the-speedinsights-component-to-your-app

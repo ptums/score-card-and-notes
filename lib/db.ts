@@ -5,6 +5,7 @@ export interface Course {
   id?: number;
   name: string;
   rounds: 9 | 18;
+  userId?: string;
 }
 
 export interface Game {
@@ -22,7 +23,7 @@ export interface Score {
   hole: number;
   par: string;
   score: string;
-  rating: 0 | 1 | 2 | 3 | 4;
+  putts: number;
 }
 
 export class AppDB extends Dexie {
@@ -36,33 +37,40 @@ export class AppDB extends Dexie {
     this.version(1).stores({
       courses: "++id, name, rounds",
       games: "++id, date, courseId",
-      scores: "++id, gameId, hole, rating",
+      scores: "++id, gameId, hole, putts",
     });
 
     this.version(2).stores({
       courses: "++id, name, rounds",
       games: "++id, date, courseId, finalNote, finalScore",
-      scores: "++id, gameId, hole, rating",
+      scores: "++id, gameId, hole, putts",
     });
 
     this.version(3).stores({
       courses: "++id, name, rounds",
       games: "++id, date, courseId, finalNote, finalScore, scores",
-      scores: "++id, gameId, hole, rating",
+      scores: "++id, gameId, hole, putts",
     });
 
     // New version removing user/account dependency
     this.version(4).stores({
       courses: "++id, name, rounds",
       games: "++id, date, courseId, finalNote, finalScore",
-      scores: "++id, gameId, hole, rating",
+      scores: "++id, gameId, hole, putts",
     });
 
     // Version 6: Remove user tracking
     this.version(6).stores({
-      courses: "++id, name, rounds",
+      courses: "++id, name, rounds, userId",
       games: "++id, date, courseId, finalNote, finalScore",
-      scores: "++id, gameId, hole, rating",
+      scores: "++id, gameId, hole, putts",
+    });
+
+    // Version 7: Rename rating to putts for better golf experience
+    this.version(7).stores({
+      courses: "++id, name, rounds, userId",
+      games: "++id, date, courseId, finalNote, finalScore",
+      scores: "++id, gameId, hole, putts",
     });
   }
 }

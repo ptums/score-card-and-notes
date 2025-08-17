@@ -41,7 +41,7 @@ export async function seedDatabase() {
       hole: hole,
       par: String(Math.floor(Math.random() * 2) + 3), // Random par 3 or 4
       score: String(Math.floor(Math.random() * 3) + 4), // Random score 4-6
-      rating: (Math.floor(Math.random() * 3) + 1) as 0 | 1 | 2 | 3 | 4, // Random rating 1-3
+      putts: Math.floor(Math.random() * 4) + 1, // Random putts 1-4
     });
   }
 
@@ -52,7 +52,7 @@ export async function seedDatabase() {
       hole: hole,
       par: String(Math.floor(Math.random() * 2) + 3), // Random par 3 or 4
       score: String(Math.floor(Math.random() * 3) + 3), // Random score 3-5
-      rating: (Math.floor(Math.random() * 3) + 2) as 0 | 1 | 2 | 3 | 4, // Random rating 2-4
+      putts: Math.floor(Math.random() * 4) + 1, // Random putts 1-3
     });
   }
 
