@@ -11,19 +11,19 @@ export async function GET(request: NextRequest) {
 
     switch (action) {
       case "count":
-        const count = await db.games.count();
+        const count = await db?.games.count();
         return NextResponse.json({ count });
 
       case "all":
-        const allGames = await db.games.toArray();
+        const allGames = await db?.games.toArray();
         return NextResponse.json({ games: allGames });
 
       case "with-courses":
-        const gamesWithCourses = await db.games.toArray();
-        const allCourses = await db.courses.toArray();
+        const gamesWithCourses = await db?.games.toArray();
+        const allCourses = await db?.courses.toArray();
 
-        const enrichedGames = gamesWithCourses.map((game) => {
-          const course = allCourses.find((c) => c.id === game.courseId);
+        const enrichedGames = gamesWithCourses?.map((game) => {
+          const course = allCourses?.find((c) => c.id === game.courseId);
           return {
             ...game,
             course: course
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
             { status: 400 }
           );
         }
-        const gameById = await db.games.get(parseInt(id));
+        const gameById = await db?.games.get(parseInt(id));
         if (!gameById) {
           return NextResponse.json(
             { error: "Game not found" },
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
             { status: 400 }
           );
         }
-        const gamesByUser = await db.games
+        const gamesByUser = await db?.games
           .where("userId")
           .equals(userId)
           .toArray();
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
       case "recent":
         const limit = parseInt(searchParams.get("limit") || "10");
-        const recentGames = await db.games
+        const recentGames = await db?.games
           .orderBy("date")
           .reverse()
           .limit(limit)
@@ -73,20 +73,25 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ games: recentGames });
 
       case "stats":
-        const totalGames = await db.games.count();
-        const games = await db.games.toArray();
-        const courses = await db.courses.toArray();
+        const totalGames = await db?.games.count();
+        const games = await db?.games.toArray();
+        const courses = await db?.courses.toArray();
 
         // Calculate basic statistics
-        const totalScore = games.reduce(
+        const totalScore = games?.reduce(
           (sum, game) => sum + (game?.finalScore || 0),
           0
         );
-        const averageScore = totalGames > 0 ? totalScore / totalGames : 0;
+        const safeTotalGames = typeof totalGames === "number" ? totalGames : 0;
+        const safeTotalScore = typeof totalScore === "number" ? totalScore : 0;
+        const averageScore =
+          safeTotalGames > 0 ? safeTotalScore / safeTotalGames : 0;
 
         // Group by course
-        const courseStats = games.reduce((acc, game) => {
-          const course = courses.find((c) => c.id === game.courseId);
+        const safeGames = Array.isArray(games) ? games : [];
+        const safeCourses = Array.isArray(courses) ? courses : [];
+        const courseStats = safeGames.reduce((acc, game) => {
+          const course = safeCourses.find((c) => c.id === game.courseId);
           const courseName = course?.name || "Unknown Course";
 
           if (!acc[courseName]) {
@@ -149,7 +154,7 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case "create":
-        const newGame = await db.games.add(data);
+        const newGame = await db?.games.add(data);
         return NextResponse.json({ id: newGame }, { status: 201 });
 
       case "update":
@@ -160,7 +165,7 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         }
-        await db.games.update(parseInt(id), updateData);
+        await db?.games.update(parseInt(id), updateData);
         return NextResponse.json({ success: true });
 
       case "delete":
@@ -171,7 +176,7 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           );
         }
-        await db.games.delete(parseInt(deleteId));
+        await db?.games.delete(parseInt(deleteId));
         return NextResponse.json({ success: true });
 
       default:

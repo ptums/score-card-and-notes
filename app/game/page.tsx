@@ -32,6 +32,11 @@ function GameContent() {
     if (!courseId) return;
 
     (async () => {
+      if (!db) {
+        console.error("Database not available");
+        return;
+      }
+
       const c = await db.courses.get(Number(courseId));
       if (!c) return;
       setCourseName(c.name);
@@ -105,7 +110,8 @@ function GameContent() {
     idx: number,
     partial: Partial<Pick<Score, "par" | "score" | "putts">>
   ) => {
-    if (gameId === null) return;
+    if (gameId === null || !db) return;
+
     const existing = await db.scores
       .where("gameId")
       .equals(gameId)
@@ -146,7 +152,7 @@ function GameContent() {
     setScoreTotal(newTotal);
 
     setIsScoreBtn(true);
-    if (gameId !== null) {
+    if (gameId !== null && db) {
       await db.games.update(gameId, { finalScore: newTotal });
     }
   };

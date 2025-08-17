@@ -5,7 +5,7 @@ export interface Course {
   id?: number;
   name: string;
   rounds: 9 | 18;
-  userId?: string;
+  profileId: string; // Link to profile instead of user
 }
 
 export interface Game {
@@ -72,7 +72,16 @@ export class AppDB extends Dexie {
       games: "++id, date, courseId, finalNote, finalScore",
       scores: "++id, gameId, hole, putts",
     });
+
+    // Version 8: Switch from user to profile system
+    this.version(8).stores({
+      courses: "++id, name, rounds, profileId",
+      games: "++id, date, courseId, finalNote, finalScore",
+      scores: "++id, gameId, hole, putts",
+    });
   }
 }
 
-export const db = new AppDB();
+// Only create database instance in browser environment
+export const db =
+  typeof window !== "undefined" ? new AppDB() : (null as AppDB | null);

@@ -2,14 +2,23 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { useAuth } from "@/lib/auth-context";
 import OfflineStatus from "./OfflineStatus";
 
 const Header = () => {
   const router = useRouter();
-  const { user, isAuthenticated, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [username, setUsername] = useState<string>("");
+
+  // Get username from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedUsername = localStorage.getItem("golf_buddy_username");
+      if (storedUsername) {
+        setUsername(storedUsername);
+      }
+    }
+  }, []);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -205,35 +214,34 @@ const Header = () => {
                     </div>
                   </button>
 
-                  {/* Authentication Section */}
-                  {isAuthenticated ? (
+                  {/* Profile Section */}
+                  {username && (
                     <>
                       <div className="border-t-2 border-amber-200 my-2"></div>
 
-                      {/* User Info */}
+                      {/* Profile Info */}
                       <div className="px-6 py-3 bg-amber-50">
                         <div className="text-sm text-slate-600">
                           <p className="font-medium text-slate-800">
-                            {user?.name}
+                            {username}
                           </p>
-                          <p className="text-xs">{user?.email}</p>
+                          <p className="text-xs">Golf Buddy</p>
                         </div>
                       </div>
 
-                      {/* Logout Button */}
+                      {/* Profile Management Button */}
                       <button
                         onClick={() => {
-                          logout();
                           setIsMenuOpen(false);
                           if (typeof window !== "undefined") {
-                            router.push("/sign-in");
+                            router.push("/profile-registration");
                           }
                         }}
-                        className="w-full px-6 py-4 text-left text-lg font-bold text-red-600 hover:bg-red-50 transition-colors duration-200 focus:outline-none focus:bg-red-50 focus:ring-2 focus:ring-red-500 focus:ring-inset cursor-pointer"
+                        className="w-full px-6 py-4 text-left text-lg font-bold text-blue-600 hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:bg-blue-50 focus:ring-2 focus:ring-blue-500 focus:ring-inset cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <svg
-                            className="w-5 h-5 text-red-600"
+                            className="w-5 h-5 text-blue-600"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -242,41 +250,10 @@ const Header = () => {
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               strokeWidth={2}
-                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                             />
                           </svg>
-                          Sign Out
-                        </div>
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="border-t-2 border-amber-200 my-2"></div>
-
-                      {/* Sign In Button */}
-                      <button
-                        onClick={() => {
-                          if (typeof window !== "undefined") {
-                            handleNavigation("/sign-in");
-                          }
-                        }}
-                        className="w-full px-6 py-4 text-left text-lg font-bold text-orange-600 hover:bg-orange-50 transition-colors duration-200 focus:outline-none focus:bg-orange-50 focus:ring-2 focus:ring-orange-500 focus:ring-inset cursor-pointer"
-                      >
-                        <div className="flex items-center gap-3">
-                          <svg
-                            className="w-5 h-5 text-orange-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                            />
-                          </svg>
-                          Sign In
+                          Manage Profile
                         </div>
                       </button>
                     </>

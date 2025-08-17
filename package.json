@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3002  --experimental-https",
+    "dev": "next dev --turbopack --port 3002",
     "build": "next build",
-    "start": "next start --port 3003",
+    "start": "next start --port 3004",
+    "https-dev": "next dev --experimental-https --port 3003",
+    "bye-next": "rm -rf .next",
+    "clean-dev": "npm run bye-next && npm run https-dev",
+    "prod": "next build && next start --port 3005",
     "lint": "next lint",
     "seed": "ts-node lib/seed.ts"
   },

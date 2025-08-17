@@ -4,7 +4,6 @@ import NewCourseForm from "@/components/NewCourseForm";
 import { useState, useEffect } from "react";
 import { db } from "../../lib/db";
 import BottomSheet from "@/components/BottomSheet";
-import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Games() {
   const [showForm, setShowForm] = useState(false);
@@ -16,6 +15,12 @@ export default function Games() {
   useEffect(() => {
     const checkExistingGames = async () => {
       try {
+        if (!db) {
+          console.log("Database not available, showing new course form");
+          setHasExistingGames(false);
+          return;
+        }
+
         console.log("Checking for existing games...");
         const gamesCount = await db.games.count();
         console.log("Games count:", gamesCount);
@@ -59,7 +64,7 @@ export default function Games() {
   }
 
   return (
-    <ProtectedRoute>
+    <>
       {/* Show form for new players or when explicitly requested */}
       {showForm || !hasExistingGames ? (
         <div>
@@ -76,6 +81,6 @@ export default function Games() {
           />
         </div>
       )}
-    </ProtectedRoute>
+    </>
   );
 }

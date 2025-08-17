@@ -1,6 +1,10 @@
 import { db } from "./db";
 
 export async function seedDatabase() {
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
   // Clear existing data
   await db.delete();
   await db.open();
@@ -9,11 +13,13 @@ export async function seedDatabase() {
   const course1Id = await db.courses.add({
     name: "Pine Valley Golf Club",
     rounds: 9,
+    profileId: "1",
   });
 
   const course2Id = await db.courses.add({
     name: "Augusta National Golf Club",
     rounds: 9,
+    profileId: "1",
   });
 
   // Create a game for course 1
@@ -59,5 +65,7 @@ export async function seedDatabase() {
   console.log("Database seeded successfully!");
 }
 
-// Run the seed function
-seedDatabase().catch(console.error);
+// Only run seed function in browser environment
+if (typeof window !== "undefined") {
+  seedDatabase().catch(console.error);
+}

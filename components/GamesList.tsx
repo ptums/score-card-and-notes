@@ -9,6 +9,10 @@ import Link from "next/link";
 export default function GamesList() {
   // 1️⃣ load & enrich games with course name, formatted date, and finalScore
   const games = useLiveQuery(async () => {
+    if (!db) {
+      return [];
+    }
+
     const raw = await db.games.toArray();
     const courses = await db.courses.toArray();
     const courseMap = new Map(courses.map((c) => [c.id, c.name]));
@@ -44,12 +48,17 @@ export default function GamesList() {
   const handleDeleteGame = async (gameId: number) => {
     console.log(gameId);
     try {
+      if (!db) {
+        console.error("Database not available");
+        return;
+      }
+
       // Use a transaction to ensure atomicity and proper live query updates
-      await db.transaction("rw", db.games, db.scores, async () => {
+      await db!.transaction("rw", db!.games, db!.scores, async () => {
         // Delete all scores associated with this game
-        await db.scores.where("gameId").equals(gameId).delete();
+        await db!.scores.where("gameId").equals(gameId).delete();
         // Delete the game
-        await db.games.delete(gameId);
+        await db!.games.delete(gameId);
       });
 
       // The transaction completion will automatically trigger useLiveQuery to refetch

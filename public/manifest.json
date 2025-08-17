@@ -1,20 +1,27 @@
 {
   "name": "Your Golf Buddy",
-  "short_name": "ScoreCard",
-  "start_url": ".",
+  "short_name": "Golf Buddy",
+  "description": "Track your golf scores and improve your game",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
+  "orientation": "portrait",
+  "background_color": "#FEF3C7",
   "theme_color": "#F97316",
+  "categories": ["sports", "productivity"],
+  "lang": "en",
   "icons": [
     {
       "src": "/favicon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ]
 }

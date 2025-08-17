@@ -26,15 +26,22 @@ export default function NewCourseForm() {
 
     if (selectedRounds !== null && courseName.trim() !== "") {
       const handle = setTimeout(async () => {
+        if (!db) {
+          console.error("Database not available");
+          return;
+        }
+
         // Create the Course record
-        const userId =
-          typeof window !== "undefined" && localStorage.getItem("offline_user")
-            ? JSON.parse(localStorage.getItem("offline_user")!).id
-            : undefined;
+        const profileId = localStorage.getItem("golf_buddy_profile_id");
+        if (!profileId) {
+          console.error("No profile ID found");
+          return;
+        }
+
         const courseId = await db.courses.add({
           name: courseName.trim(),
           rounds: selectedRounds,
-          userId,
+          profileId,
         });
 
         // Redirect to the game page
