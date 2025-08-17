@@ -6,50 +6,6 @@ export default function APIDocsPage() {
   const [activeTab, setActiveTab] = useState("users");
 
   const apiDocs = {
-    users: {
-      title: "Users API",
-      description: "Manage user accounts and authentication",
-      endpoints: [
-        {
-          method: "GET",
-          path: "/api/users?action=count",
-          description: "Get total user count",
-          response: '{ "count": 5 }',
-        },
-        {
-          method: "GET",
-          path: "/api/users?action=all",
-          description: "Get all users (without sensitive data)",
-          response: '{ "users": [...] }',
-        },
-        {
-          method: "GET",
-          path: "/api/users?action=by-email&email=user@example.com",
-          description: "Get user by email",
-          response: '{ "user": {...} }',
-        },
-        {
-          method: "GET",
-          path: "/api/users?action=by-id&id=user-id",
-          description: "Get user by ID",
-          response: '{ "user": {...} }',
-        },
-        {
-          method: "POST",
-          path: "/api/users",
-          description: "Create new user",
-          body: '{ "action": "create", "email": "user@example.com", "password": "password", "name": "User Name" }',
-          response: '{ "user": {...} }',
-        },
-        {
-          method: "POST",
-          path: "/api/users",
-          description: "Authenticate user",
-          body: '{ "action": "authenticate", "email": "user@example.com", "password": "password" }',
-          response: '{ "user": {...} }',
-        },
-      ],
-    },
     games: {
       title: "Games API",
       description: "Manage golf game data and statistics",
@@ -121,38 +77,6 @@ export default function APIDocsPage() {
         },
       ],
     },
-    export: {
-      title: "Export/Import API",
-      description: "Backup and restore data",
-      endpoints: [
-        {
-          method: "GET",
-          path: "/api/export",
-          description: "Export all data as JSON",
-          response: '{ "users": [...], "games": [...], "metadata": {...} }',
-        },
-        {
-          method: "GET",
-          path: "/api/export?format=csv",
-          description: "Export all data as CSV",
-          response: "CSV file download",
-        },
-        {
-          method: "GET",
-          path: "/api/export?includePasswords=true",
-          description: "Export with password hashes (for migration)",
-          response: '{ "users": [...], "games": [...], "metadata": {...} }',
-        },
-        {
-          method: "POST",
-          path: "/api/export",
-          description: "Import data from backup",
-          body: '{ "action": "import", "data": { "users": [...], "games": [...] } }',
-          response:
-            '{ "success": true, "importedUsers": 5, "importedGames": 25 }',
-        },
-      ],
-    },
   };
 
   return (
@@ -181,7 +105,7 @@ export default function APIDocsPage() {
                     : "text-slate-600 hover:text-slate-800 hover:bg-amber-50"
                 }`}
               >
-                {apiDocs[tab as keyof typeof apiDocs].title}
+                {apiDocs[tab as keyof typeof apiDocs]?.title}
               </button>
             ))}
           </div>
@@ -191,15 +115,15 @@ export default function APIDocsPage() {
         <div className="bg-white rounded-2xl shadow-xl border-2 border-amber-200 p-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-slate-800 mb-2">
-              {apiDocs[activeTab as keyof typeof apiDocs].title}
+              {apiDocs[activeTab as keyof typeof apiDocs]?.title}
             </h2>
             <p className="text-slate-600">
-              {apiDocs[activeTab as keyof typeof apiDocs].description}
+              {apiDocs[activeTab as keyof typeof apiDocs]?.description}
             </p>
           </div>
 
           <div className="space-y-6">
-            {apiDocs[activeTab as keyof typeof apiDocs].endpoints.map(
+            {apiDocs[activeTab as keyof typeof apiDocs]?.endpoints.map(
               (endpoint, index) => (
                 <div
                   key={index}
