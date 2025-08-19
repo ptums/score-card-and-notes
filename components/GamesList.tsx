@@ -1,79 +1,102 @@
-// app/games/page.tsx
 "use client";
-import { useLiveQuery } from "dexie-react-hooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "../lib/db";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 import Link from "next/link";
 
 export default function GamesList() {
-  // 1️⃣ load & enrich games with course name, formatted date, and finalScore
-  const games = useLiveQuery(async () => {
-    if (!db) {
-      return [];
-    }
+  const queryClient = useQueryClient();
+  // Simple React Query hook for fetching games
+  const {
+    data: games = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["games"],
+    queryFn: async () => {
+      if (!db) return [];
 
-    const raw = await db.games.toArray();
-    const courses = await db.courses.toArray();
-    const courseMap = new Map(courses.map((c) => [c.id, c.name]));
+      const raw = await db.games.toArray();
+      const courses = await db.courses.toArray();
+      const courseMap = new Map(courses.map((c) => [c.id, c.name]));
 
-    const uniqueGames = raw.filter(
-      (game, index, self) =>
-        game.courseId &&
-        index === self.findIndex((g) => g.courseId === game.courseId)
-    );
+      // Get the most recent game for each course
+      const uniqueGames = raw
+        .filter((game) => game.courseId)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .filter(
+          (game, index, self) =>
+            index === self.findIndex((g) => g.courseId === game.courseId)
+        );
 
-    return uniqueGames.map((g) => ({
-      id: g.id!,
-      courseId: g.courseId,
-      courseName: courseMap.get(g.courseId) ?? "",
-      datePlayed: g.date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-      finalScore: g.finalScore ?? 0,
-    }));
+      return uniqueGames.map((g) => ({
+        id: g.id!,
+        courseId: g.courseId,
+        courseName: courseMap.get(g.courseId) ?? "",
+        datePlayed: g.date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }),
+        finalScore: g.finalScore ?? 0,
+      }));
+    },
+    enabled: !!db,
+  });
+
+  // Delete mutation
+  const deleteGameMutation = useMutation({
+    mutationFn: async (gameId: number) => {
+      if (!db) throw new Error("Database not available");
+
+      await db?.transaction("rw", db.games, db.scores, async () => {
+        await db?.scores.where("gameId").equals(gameId).delete();
+        await db?.games.delete(gameId);
+      });
+    },
+    onSuccess: () => {
+      // Invalidate and refetch games
+      queryClient.invalidateQueries({ queryKey: ["games"] });
+    },
   });
 
   const parentRef = useRef<HTMLDivElement>(null);
   const rowVirtualizer = useVirtualizer({
     count: games?.length ?? 0,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 120, // Increased height for better spacing
+    estimateSize: () => 120,
     overscan: 5,
   });
 
-  // Delete game function
-  const handleDeleteGame = async (gameId: number) => {
-    console.log(gameId);
-    try {
-      if (!db) {
-        console.error("Database not available");
-        return;
-      }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading games...</p>
+        </div>
+      </div>
+    );
+  }
 
-      // Use a transaction to ensure atomicity and proper live query updates
-      await db!.transaction("rw", db!.games, db!.scores, async () => {
-        // Delete all scores associated with this game
-        await db!.scores.where("gameId").equals(gameId).delete();
-        // Delete the game
-        await db!.games.delete(gameId);
-      });
-
-      // The transaction completion will automatically trigger useLiveQuery to refetch
-    } catch (error) {
-      console.error("Error deleting game:", error);
-    }
-  };
+  if (error) {
+    return (
+      <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600">Error loading games: {error.message}</p>
+        </div>
+      </div>
+    );
+  }
 
   // if we have games, we'd list them here
   if (games && games.length > 0) {
     return (
       <div
         ref={parentRef}
-        className="overflow-y-auto pb-32" // Increased padding for buttons
-        style={{ height: "calc(100vh - 80px)" }} // Adjusted for header height
+        className="overflow-y-auto pb-32"
+        style={{ height: "calc(100vh - 80px)" }}
       >
         <div
           style={{
@@ -115,7 +138,7 @@ export default function GamesList() {
                     </div>
                     <div className="border-l-2 border-slate-200 h-12 mx-2"></div>
                     <button
-                      onClick={() => handleDeleteGame(game.id)}
+                      onClick={() => deleteGameMutation.mutate(game.id)}
                       className="w-12 h-12 flex items-center justify-center text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors cursor-pointer border-2 border-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                       title="Delete game"
                       aria-label={`Delete game at ${game.courseName}`}
@@ -144,4 +167,14 @@ export default function GamesList() {
       </div>
     );
   }
+
+  // No games found
+  return (
+    <div className="min-h-screen bg-amber-50 flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-gray-600 mb-4">No games found.</p>
+        <p className="text-sm text-gray-500">Create a course to get started!</p>
+      </div>
+    </div>
+  );
 }

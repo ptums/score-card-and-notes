@@ -20,6 +20,8 @@ function GameContent() {
   const searchParams = useSearchParams();
   const courseId = searchParams.get("courseId") as string;
   const [gameId, setGameId] = useState<number | null>(null);
+
+  // Debug gameId changes
   const [courseName, setCourseName] = useState<string>("");
   const [isPuttsBtn, setIsPuttsBtn] = useState<boolean>(false);
   const [isScoreBtn, setIsScoreBtn] = useState<boolean>(false);
@@ -31,6 +33,9 @@ function GameContent() {
   useEffect(() => {
     if (!courseId) return;
 
+    // Prevent multiple executions
+    let isMounted = true;
+
     (async () => {
       if (!db) {
         console.error("Database not available");
@@ -39,18 +44,25 @@ function GameContent() {
 
       const c = await db.courses.get(Number(courseId));
       if (!c) return;
+
+      if (!isMounted) return;
       setCourseName(c.name);
 
       // Get the most recent game for this course, or create a new one
       const games = await db.games
         .where("courseId")
         .equals(c.id!)
-        .reverse()
         .sortBy("date");
+
+      // Reverse to get newest first
+      games.reverse();
 
       let g: Game | undefined = games[0];
 
       if (!g) {
+        console.log(
+          `No existing game found for course ${c.id}, creating new game...`
+        );
         const newId = await db.games.add({
           courseId: c.id!,
           date: new Date(),
@@ -58,11 +70,20 @@ function GameContent() {
           finalScore: 0,
           scores: [],
         });
+        console.log(`Created new game with ID: ${newId}`);
         g = await db.games.get(newId);
+        console.log(`New game object:`, g);
+      } else {
+        console.log(`Found existing game:`, g);
       }
 
+      if (!isMounted) return;
+
       if (g) {
+        console.log(`Setting gameId to: ${g.id} (type: ${typeof g.id})`);
         setGameId(g.id!);
+      } else {
+        console.error(`No game object to set gameId from`);
       }
 
       // build entries array
@@ -81,6 +102,8 @@ function GameContent() {
         score: r?.score ?? "",
         putts: r?.putts ?? null,
       }));
+
+      if (!isMounted) return;
       setEntries(initial);
 
       // calc initial total
@@ -96,6 +119,10 @@ function GameContent() {
         setCurrent(lastParIndex);
       }
     })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [courseId]);
 
   // enable putts buttons
@@ -153,20 +180,23 @@ function GameContent() {
 
     setIsScoreBtn(true);
     if (gameId !== null && db) {
-      await db.games.update(gameId, { finalScore: newTotal });
+      try {
+        // First, let's check what the current game looks like
+        const currentGame = await db.games.get(gameId);
+
+        if (!currentGame) {
+          console.error(`Game with ID ${gameId} not found!`);
+          return;
+        }
+
+        // Now try to update
+        await db.games.update(gameId, { finalScore: newTotal });
+      } catch (error) {
+        console.error(`Failed to update game ${gameId}:`, error);
+      }
+    } else {
+      console.error(`Cannot update game: gameId=${gameId}, db=${!!db}`);
     }
-  };
-
-  // handle Putts selection
-  const onPutts = async (val: number) => {
-    const updated = [...entries];
-    updated[current].putts = val;
-    setEntries(updated);
-    await upsertScore(current, { putts: val });
-  };
-
-  const handlePutts = (opt: number) => {
-    onPutts(opt);
 
     const handle = window.setTimeout(async () => {
       // 1) create the Course record
@@ -179,6 +209,14 @@ function GameContent() {
     }, 1100);
 
     return () => clearTimeout(handle);
+  };
+
+  // handle Putts selection
+  const onPutts = async (val: number) => {
+    const updated = [...entries];
+    updated[current].putts = val;
+    setEntries(updated);
+    await upsertScore(current, { putts: val });
   };
 
   const holes = entries.length;
@@ -215,7 +253,7 @@ function GameContent() {
                       key={n}
                       onClick={() => onParSelect(n)}
                       className={`
-                      w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
+                      orange-marble-base w-16 h-16
                       ${
                         active
                           ? "bg-orange-600 text-white shadow-lg"
@@ -243,11 +281,11 @@ function GameContent() {
                     <button
                       key={n}
                       onClick={() => {
-                        handlePutts(n);
+                        onPutts(n);
                       }}
                       disabled={!entries[current]?.par}
                       className={`
-                      w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
+                      orange-marble-base w-16 h-16 
                       ${
                         isPuttsBtn || entries[current]?.par
                           ? active
@@ -278,7 +316,7 @@ function GameContent() {
                       key={n}
                       onClick={() => onScoreSelect(n)}
                       className={`
-                      w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
+                      orange-marble-base w-16 h-16
                       ${
                         entries[current]?.putts
                           ? active

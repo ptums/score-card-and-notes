@@ -34,7 +34,10 @@ export default function NewCourseForm() {
         // Create the Course record
         const profileId = localStorage.getItem("golf_buddy_profile_id");
         if (!profileId) {
-          console.error("No profile ID found");
+          console.error(
+            "No profile ID found - redirecting to profile registration"
+          );
+          window.location.href = "/profile-registration";
           return;
         }
 

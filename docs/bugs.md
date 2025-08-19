@@ -2,7 +2,7 @@
 
 # Web
 
-- Fix Clerk for offline mode
+- Mobile: fix orange button component
 
 # PWA
 

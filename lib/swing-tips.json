@@ -3,7 +3,7 @@
     "club": "Driver",
     "ballPosition": {
       "numerOfPositions": [1, 2, 3, 4, 5, 6, 7],
-      "position": 1
+      "position": 2
     },
     "stanceWidth": {
       "numerOfPositions": [1, 2, 3, 4, 5, 6, 7],
@@ -16,7 +16,7 @@
     },
     "lieAdjustments": {
       "teeBox": {
-        "target": "Front of the center-left part of the ball",
+        "target": "Front of the center-left part of the ball. Back of ball should be visible",
         "grip": {
           "numerOfPositions": [1, 2, 3, 4, 5],
           "position": [2]

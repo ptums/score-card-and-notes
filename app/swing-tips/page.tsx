@@ -80,7 +80,7 @@ const SwingTips = () => {
                     return (
                       <span
                         key={n}
-                        className={`orange-marble-base ${
+                        className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                           n === selectedClub?.ballPosition.position
                             ? "bg-orange-600 text-white shadow-lg"
                             : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
@@ -90,16 +90,14 @@ const SwingTips = () => {
                         {n === 2 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
                             <span className="text-sm">R</span>
-                            <span className="text-xs">Foot</span>
                           </div>
                         ) : n === 6 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
                             <span className="text-sm">L</span>
-                            <span className="text-xs">Foot</span>
                           </div>
                         ) : n === 4 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
-                            <span className="text-xs">Center</span>
+                            <span className="text-xs">C</span>
                           </div>
                         ) : null}
                       </span>
@@ -114,7 +112,7 @@ const SwingTips = () => {
                     return (
                       <span
                         key={n}
-                        className={`orange-marble-base ${
+                        className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                           selectedClub?.stanceWidth.position.includes(n)
                             ? "bg-orange-600 text-white shadow-lg"
                             : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
@@ -124,16 +122,14 @@ const SwingTips = () => {
                         {n === 2 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
                             <span className="text-sm">R</span>
-                            <span className="text-xs">Foot</span>
                           </div>
                         ) : n === 6 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
                             <span className="text-sm">L</span>
-                            <span className="text-xs">Foot</span>
                           </div>
                         ) : n === 4 ? (
                           <div className="flex flex-col items-center justify-center space-y-0 font-normal">
-                            <span className="text-xs">Center</span>
+                            <span className="text-xs">C</span>
                           </div>
                         ) : null}
                       </span>
@@ -149,7 +145,7 @@ const SwingTips = () => {
                       return (
                         <span
                           key={n}
-                          className={`orange-marble-base ${
+                          className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                             selectedClub?.weightDistribution.position.includes(
                               n
                             )
@@ -161,16 +157,14 @@ const SwingTips = () => {
                           {n === 2 ? (
                             <div className="flex flex-col items-center justify-center space-y-0 font-normal">
                               <span className="text-sm">R</span>
-                              <span className="text-xs">Foot</span>
                             </div>
                           ) : n === 6 ? (
                             <div className="flex flex-col items-center justify-center space-y-0 font-normal">
-                              <span className="text-sm">L</span>
-                              <span className="text-xs">Foot</span>
+                              <span className="text-xs">L</span>
                             </div>
                           ) : n === 4 ? (
                             <div className="flex flex-col items-center justify-center space-y-0 font-normal">
-                              <span className="text-xs">Center</span>
+                              <span className="text-xs">C</span>
                             </div>
                           ) : null}
                         </span>
@@ -212,7 +206,7 @@ const SwingTips = () => {
                               {value.grip.numerOfPositions.map((n: number) => (
                                 <span
                                   key={n}
-                                  className={`orange-marble-base ${
+                                  className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                                     value.grip.position.includes(n)
                                       ? "bg-orange-600 text-white shadow-lg"
                                       : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
