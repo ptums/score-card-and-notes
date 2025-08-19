@@ -74,6 +74,7 @@ function GamesContent() {
     console.log("Profile found, checking for existing games...");
 
     getExistingGames(); // Only depend on hasProfile, not hasExistingGames
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasProfile]); // Only depend on hasProfile, not hasExistingGames
 
   // Show loading while checking data
