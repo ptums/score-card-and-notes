@@ -61,7 +61,7 @@ const PracticeDrills = () => {
   };
 
   return (
-    <div className="container flex-col mx-auto p-6">
+    <div className="flex-col mx-auto p-1">
       {/* Drill Carousel - appears above club selection when a club is selected */}
       {selectedClubData && (
         <div className="mb-10">

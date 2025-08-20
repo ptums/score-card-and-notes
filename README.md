@@ -1,114 +1,25 @@
-# Your Golf Buddy
+<p align="center"><img src="https://raw.githubusercontent.com/gobuffalo/buffalo/main/logo.svg" width="360"></p>
 
-An offline‑first Progressive Web App (PWA) for tracking golf rounds, built with Next.js, Preact, Tailwind CSS, Dexie (IndexedDB), and TanStack Virtual for performant list virtualization.
+<p align="center">
+<a href="https://pkg.go.dev/github.com/gobuffalo/cli"><img src="https://pkg.go.dev/badge/github.com/gobuffalo/cli" alt="PkgGoDev"></a>
+<a href="https://github.com/gobuffalo/cli/actions/workflows/standard-go-test.yml"><img src="https://github.com/gobuffalo/cli/actions/workflows/standard-go-test.yml/badge.svg" alt="Standard Test" /></a>
+<a href="https://goreportcard.com/report/github.com/gobuffalo/cli"><img src="https://goreportcard.com/badge/github.com/gobuffalo/cli" alt="Go Report Card" /></a>
+</p>
 
-## Features
+# Buffalo CLI
 
-- **Simple navigation**: Direct access to courses and games without authentication.
+This is the repo for the Buffalo CLI. The Buffalo CLI is a tool to develop, test and deploy your Buffalo applications.
 
-- **Course management**: Create new courses (9‑ or 18‑hole) with a simple form.
+## Installation
 
-- **Game listing**: View all past games, showing course name & date.
+To install the Buffalo CLI you can run the following command:
 
-- **Hole‑by‑hole score entry**:
-
-  - Per‑hole cards are virtualized for performance
-  - Tap to activate Par/Score inputs; auto‑advance from Par→Score after 1 s
-  - Select number of putts per hole (1-5)
-  - Data persists in IndexedDB and survives page reloads
-
-- **Offline‑capable PWA**:
-  - Uses next-pwa + service worker for asset caching
-  - System‑UI font stack for zero‑delay rendering
-
-## Tech Stack
-
-- Framework: Next.js 13 (App Router)
-
-- View Layer: Preact (via preact/compat)
-
-- Styling: Tailwind CSS
-
-- Local Storage: Dexie (IndexedDB)
-
-- List Virtualization: @tanstack/react-virtual
-
-- PWA: next-pwa for service worker & manifest
-
-## Getting Started
-
-1. Clone the repo
-
-```
-git clone https://github.com/your-org/score-card-and-notes.git
-cd score-card-and-notes
+```bash
+go install github.com/gobuffalo/cli/cmd/buffalo@latest
 ```
 
-2. Install dependencies
+<!-- Installing the Buffalo CLI requires Go 1.16 or newer as it depends heavily on the embed package. Once you have ensured you installed Go 1.16 or newer,  -->
 
-```
-npm install
-Run in development
-```
+## Usage
 
-3. Run in development
-
-```
-npm run dev
-# Visit http://localhost:3000
-```
-
-4. Build & start production
-
-```
-npm run build
-npm run start
-# PWA assets generated in /public
-```
-
-## Project Structure
-
-```.
-├── app/                      # Next.js App Router pages
-│   ├── layout.tsx            # Root layout
-│   ├── page.tsx              # Home (PhoneNumberInput)
-│   ├── games/
-│   │   └── page.tsx          # GamesPage listing
-│   └── game/
-│       └── [courseId]/
-│           └── page.tsx      # GameEntryPage (virtualized cards)
-├── components/               # Reusable UI components
-│   ├── PhoneNumberInput.tsx
-│   └── GamesPage.tsx
-├── services/                 # Dexie DB setup & migration
-│   └── db.ts                 # IndexedDB schema & migration
-├── styles/
-│   └── globals.css           # Tailwind imports & base styles
-├── public/
-│   ├── manifest.json         # PWA manifest
-│   └── icons/                # PWA icons
-├── tailwind.config.js        # Tailwind configuration
-├── next.config.js            # Next.js + Preact + PWA settings
-└── package.json
-```
-
-## Database Schema (Dexie v2)
-
-```
-// Course
-{ id, name: string, rounds: 9 | 18 }
-
-// Game
-{ id, date: Date, courseId: number, finalNote: string, finalScore }
-
-// Score
-{ id, gameId: number, hole: number, par: string, score: string, putts: number }
-```
-
-- Scores are keyed by gameId + hole so entries persist and reload correctly.
-
-To Do:
-
-- Get better Practice Drill content
-- Fix position of cards in practice and position screens for table/desktop
-- Number of putts
+Once installed, the Buffalo CLI can be used by invoking the `buffalo` command. To know more about the available commands, run the `buffalo help` command. or you can also get details on a specific command by running `buffalo help <command>`.

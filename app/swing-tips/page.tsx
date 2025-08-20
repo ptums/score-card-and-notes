@@ -64,7 +64,7 @@ const SwingTips = () => {
   };
 
   return (
-    <div className="container flex-col mx-auto p-6">
+    <div className="flex-col mx-auto p-1">
       {selectedClub && (
         <div className="mb-10">
           <div className="flex-1 p-6 flex flex-col justify-center">
@@ -83,6 +83,8 @@ const SwingTips = () => {
                         className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                           n === selectedClub?.ballPosition.position
                             ? "bg-orange-600 text-white shadow-lg"
+                            : n === 2 || n === 4 || n === 6
+                            ? "bg-orange-200 text-slate-800 hover:bg-orange-300 border-2 border-orange-300"
                             : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
                         }`}
                         aria-label={`foot position ${n}`}
@@ -115,6 +117,8 @@ const SwingTips = () => {
                         className={`orange-marble-base w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 ${
                           selectedClub?.stanceWidth.position.includes(n)
                             ? "bg-orange-600 text-white shadow-lg"
+                            : n === 2 || n === 4 || n === 6
+                            ? "bg-orange-200 text-slate-800 hover:bg-orange-300 border-2 border-orange-300"
                             : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
                         }`}
                         aria-label={`foot position ${n}`}
@@ -150,6 +154,8 @@ const SwingTips = () => {
                               n
                             )
                               ? "bg-orange-600 text-white shadow-lg"
+                              : n === 2 || n === 4 || n === 6
+                              ? "bg-orange-200 text-slate-800 hover:bg-orange-300 border-2 border-orange-300"
                               : "bg-orange-100 text-slate-800 hover:bg-orange-200 border-2 border-orange-200"
                           }`}
                           aria-label={`foot position ${n}`}
