@@ -152,11 +152,36 @@ class BackgroundSyncService {
   }
 
   private async sendToCloud(data: any): Promise<boolean> {
-    const syncEndpoint =
-      process.env.NEXT_PUBLIC_SYNC_ENDPOINT || "https://api.golfbuddy.com/sync";
+    const syncBaseUrl =
+      process.env.NEXT_PUBLIC_SYNC_ENDPOINT || "http://localhost:8000/api";
 
     try {
-      const response = await fetch(syncEndpoint, {
+      // Use the new cursor-based sync API
+      // Step 1: Check sync state
+      const cursors = this.getCursors();
+      const stateResponse = await fetch(`${syncBaseUrl}/sync/state`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cursors }),
+      });
+
+      if (!stateResponse.ok) {
+        throw new Error(
+          `HTTP ${stateResponse.status}: ${stateResponse.statusText}`
+        );
+      }
+
+      const syncState = await stateResponse.json();
+
+      if (syncState.inSync) {
+        console.log("Data is already in sync");
+        return true;
+      }
+
+      // Step 2: Push changes
+      const pushResponse = await fetch(`${syncBaseUrl}/sync/push`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,14 +189,64 @@ class BackgroundSyncService {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (!pushResponse.ok) {
+        throw new Error(
+          `HTTP ${pushResponse.status}: ${pushResponse.statusText}`
+        );
       }
+
+      const pushResult = await pushResponse.json();
+      this.setCursors(pushResult.serverCursors);
+
+      // Step 3: Pull changes
+      const pullResponse = await fetch(`${syncBaseUrl}/sync/pull`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cursors: pushResult.serverCursors, limit: 100 }),
+      });
+
+      if (!pullResponse.ok) {
+        throw new Error(
+          `HTTP ${pullResponse.status}: ${pullResponse.statusText}`
+        );
+      }
+
+      const pullResult = await pullResponse.json();
+      await this.applyChanges(pullResult.changes);
+      this.setCursors(pullResult.serverCursors);
 
       return true;
     } catch (error) {
-      console.error("Failed to send data to cloud:", error);
+      console.error("Failed to sync with cloud:", error);
       return false;
+    }
+  }
+
+  private getCursors(): any {
+    const cursors = localStorage.getItem("golf_buddy_sync_cursors");
+    return cursors ? JSON.parse(cursors) : {};
+  }
+
+  private setCursors(cursors: any) {
+    localStorage.setItem("golf_buddy_sync_cursors", JSON.stringify(cursors));
+  }
+
+  private async applyChanges(changes: any): Promise<void> {
+    // Import dynamically to avoid SSR issues
+    const { db } = await import("./db");
+
+    if (changes.courses?.length > 0 && db) {
+      await db.courses.bulkPut(changes.courses);
+    }
+
+    if (changes.games?.length > 0 && db) {
+      await db.games.bulkPut(changes.games);
+    }
+
+    if (changes.scores?.length > 0 && db) {
+      await db.scores.bulkPut(changes.scores);
     }
   }
 
