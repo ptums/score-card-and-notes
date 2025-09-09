@@ -18,15 +18,11 @@ function GamesContent() {
   const getExistingGames = useCallback(async () => {
     try {
       if (!db) {
-        console.log("db", db);
-        console.log("Database not available, showing new course form");
         setHasExistingGames(false);
         return;
       }
-      console.log("hit :1");
-      console.log("Checking for existing games...");
+
       const gamesCount = await db.games.count();
-      console.log("Games count:", gamesCount);
       setHasExistingGames(gamesCount > 0);
     } catch (error) {
       console.error("Error checking existing games:", error);
@@ -38,16 +34,12 @@ function GamesContent() {
   // Check if user has a profile first
   useEffect(() => {
     const checkProfile = () => {
-      console.log("Checking profile in localStorage...");
       const profileId = localStorage.getItem("golf_buddy_profile_id");
-      console.log("Profile ID from localStorage:", profileId);
 
       if (!profileId) {
-        console.log("No profile ID found, setting hasProfile to false");
         setHasProfile(false);
         return;
       }
-      console.log("Profile ID found, setting hasProfile to true");
       setHasProfile(true);
     };
 
@@ -56,22 +48,16 @@ function GamesContent() {
 
   // Check if there are existing games (only after profile check)
   useEffect(() => {
-    console.log("Games useEffect triggered - hasProfile:", hasProfile);
-
     if (hasProfile === false) {
       // No profile, redirect to profile registration
-      console.log("No profile found, redirecting to profile registration");
       window.location.href = "/profile-registration";
       return;
     }
 
     if (hasProfile !== true) {
       // Still checking profile
-      console.log("Still checking profile, waiting...");
       return;
     }
-
-    console.log("Profile found, checking for existing games...");
 
     getExistingGames(); // Only depend on hasProfile, not hasExistingGames
     // eslint-disable-next-line react-hooks/exhaustive-deps

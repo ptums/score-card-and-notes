@@ -8,6 +8,7 @@ import type { Game } from "@/lib/db";
 import BottomSheet from "@/components/BottomSheet";
 import NavigationButton from "@/components/NavigationButton";
 import { useRouter } from "next/navigation";
+import { syncManager } from "@/lib/sync-manager";
 
 interface ScoreEntry {
   par: string;
@@ -60,9 +61,6 @@ function GameContent() {
       let g: Game | undefined = games[0];
 
       if (!g) {
-        console.log(
-          `No existing game found for course ${c.id}, creating new game...`
-        );
         const newId = await db.games.add({
           courseId: c.id!,
           date: new Date(),
@@ -70,17 +68,13 @@ function GameContent() {
           finalScore: 0,
           scores: [],
         });
-        console.log(`Created new game with ID: ${newId}`);
         g = await db.games.get(newId);
-        console.log(`New game object:`, g);
       } else {
-        console.log(`Found existing game:`, g);
       }
 
       if (!isMounted) return;
 
       if (g) {
-        console.log(`Setting gameId to: ${g.id} (type: ${typeof g.id})`);
         setGameId(g.id!);
       } else {
         console.error(`No game object to set gameId from`);
@@ -353,7 +347,19 @@ function GameContent() {
         {current === holes - 1 && (
           <BottomSheet
             label="Finish Game"
-            handleCallback={() => router.push("/games")}
+            handleCallback={async () => {
+              // Trigger sync after game completion
+
+              if (syncManager) {
+                try {
+                  await syncManager.triggerGameCompletionSync();
+                  console.log("Sync triggered successfully");
+                } catch (error) {
+                  console.error("Failed to sync after game completion:", error);
+                }
+              }
+              router.push("/games");
+            }}
             position="fixed bottom-0 left-0 bg-white/80 border-t-2 border-amber-200"
             colorClasses="bg-orange-600 active:bg-orange-500 text-white font-semibold"
           />

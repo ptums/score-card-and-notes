@@ -2,15 +2,29 @@
 
 import { useState, useEffect } from "react";
 import { cloudSync, SyncStatus } from "@/lib/cloud-sync";
+import { syncManager, SyncTrigger } from "@/lib/sync-manager";
 
 export default function SyncSettings() {
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
+  const [syncHistory, setSyncHistory] = useState<SyncTrigger[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (cloudSync) {
-      setSyncStatus(cloudSync.getSyncStatus());
-    }
+    const updateStatus = () => {
+      if (cloudSync) {
+        setSyncStatus(cloudSync.getSyncStatus());
+      }
+      if (syncManager) {
+        setSyncHistory(syncManager.getSyncHistory());
+      }
+    };
+
+    updateStatus();
+
+    // Update every 2 seconds
+    const interval = setInterval(updateStatus, 2000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleToggleSync = async () => {
@@ -32,12 +46,17 @@ export default function SyncSettings() {
   };
 
   const handleForceSync = async () => {
-    if (!cloudSync || !syncStatus?.isEnabled) return;
+    if (!syncManager || !syncStatus?.isEnabled) return;
 
     setIsLoading(true);
     try {
-      await cloudSync.forceSync();
-      setSyncStatus(cloudSync.getSyncStatus());
+      await syncManager.triggerManualSync("Manual sync from settings");
+      if (cloudSync) {
+        setSyncStatus(cloudSync.getSyncStatus());
+      }
+      if (syncManager) {
+        setSyncHistory(syncManager.getSyncHistory());
+      }
     } catch (error) {
       console.error("Failed to force sync:", error);
     } finally {
@@ -130,6 +149,36 @@ export default function SyncSettings() {
             >
               {isLoading ? "Syncing..." : "Sync Now"}
             </button>
+
+            {/* Sync History */}
+            {syncHistory.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-slate-700 mb-2">
+                  Recent Sync Triggers
+                </h4>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {syncHistory
+                    .slice(-5)
+                    .reverse()
+                    .map((trigger, index) => (
+                      <div
+                        key={`${trigger.timestamp}-${index}`}
+                        className="text-xs text-slate-600 bg-slate-50 p-2 rounded"
+                      >
+                        <div className="flex justify-between">
+                          <span className="font-medium">
+                            {trigger.type.replace("_", " ")}
+                          </span>
+                          <span>
+                            {new Date(trigger.timestamp).toLocaleTimeString()}
+                          </span>
+                        </div>
+                        <div className="text-slate-500">{trigger.reason}</div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

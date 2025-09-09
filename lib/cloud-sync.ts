@@ -215,6 +215,8 @@ class CloudSyncService {
         body: JSON.stringify(syncData),
       });
 
+      console.log("response", response);
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -333,6 +335,13 @@ class CloudSyncService {
   }
 
   getSyncStatus(): SyncStatus {
+    console.log("getSyncStatus", {
+      lastSync: this.getLastSyncTime(),
+      isEnabled: this.isSyncEnabled(),
+      isSyncing: localStorage.getItem("golf_buddy_sync_status") === "syncing",
+      lastError: localStorage.getItem("golf_buddy_last_error"),
+      nextSyncTime: localStorage.getItem("golf_buddy_next_sync"),
+    });
     return {
       lastSync: this.getLastSyncTime(),
       isEnabled: this.isSyncEnabled(),

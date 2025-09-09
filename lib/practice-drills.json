@@ -186,23 +186,16 @@
       "club": "Pitching Wedge",
       "drills": [
         {
-          "name": "Pitching Wedge Drill 1",
-          "description": "Practice partial swings from 50-100 yards to improve distance control.",
+          "name": "3 Check points",
+          "description": "Short shots swing ankle to ankle, Medium shots swing knee to knee, Long shots hip to hip",
           "focus": "distance control",
           "recommendedReps": "10–15 balls per set",
           "difficulty": "beginner-friendly"
         },
         {
-          "name": "Pitching Wedge Drill 2",
-          "description": "Hit chips with the pitching wedge focusing on low running shots.",
-          "focus": "versatility and run",
-          "recommendedReps": "10–15 balls per set",
-          "difficulty": "beginner-friendly"
-        },
-        {
-          "name": "Pitching Wedge Drill 3",
-          "description": "Focus on accelerating through impact for crisp contact and feel.",
-          "focus": "acceleration and contact",
+          "name": "Short Shots",
+          "description": "Use your putting stroke with a pitching wedge",
+          "focus": "short shots",
           "recommendedReps": "10–15 balls per set",
           "difficulty": "beginner-friendly"
         }
@@ -238,23 +231,9 @@
       "club": "Putter",
       "drills": [
         {
-          "name": "Putter Drill 1",
-          "description": "Putt to various distances focusing on distance control and speed.",
-          "focus": "distance control",
-          "recommendedReps": "10–15 putts per set",
-          "difficulty": "beginner-friendly"
-        },
-        {
-          "name": "Putter Drill 2",
-          "description": "Putt with eyes closed to develop feel for stroke length.",
-          "focus": "feel and speed",
-          "recommendedReps": "10–15 putts per set",
-          "difficulty": "beginner-friendly"
-        },
-        {
-          "name": "Putter Drill 3",
-          "description": "Practice pendulum motion with shoulders for smooth rhythm.",
-          "focus": "rhythm and pendulum",
+          "name": "Visualize the putt",
+          "description": "Take a good look at the hole. Then take a few practice putts. Look at the line. Look at the hole. One more practice swing. Line up putt and and keep the visual of the hole in your head.",
+          "focus": "accuracy",
           "recommendedReps": "10–15 putts per set",
           "difficulty": "beginner-friendly"
         }
